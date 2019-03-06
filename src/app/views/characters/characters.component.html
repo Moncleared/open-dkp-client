@@ -1,0 +1,72 @@
+<div class="row align-items-center">
+    <div class="col"></div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="icon-drop"></i> Characters
+            </div>
+            <div class="card-body">
+                <div class="clearfix">
+                    <div class="float-left">
+                        <a routerLink="/characters/insert" *ngIf="isAdmin"><i class="icon-plus"></i> Add Character</a>
+                    </div>
+                    <div class="float-right">
+                        <div class="input-group">
+                            <div class="form-check" style="margin-right: 10px">
+                                <input class="form-check-input" type="checkbox"[(ngModel)]="isChecked" (change)="isActiveToggle()" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Include Inactives?
+                                </label>
+                            </div>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Filter</span>
+                            </div>
+                            <input (keyup)="onKey($event)" [(ngModel)]="filterBy" placeholder="filter text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <ngx-datatable class="bootstrap" [rows]="vCharacterList" [headerHeight]="30" [footerHeight]="30" [limit]="15" [columnMode]="'force'" [rowHeight]="'auto'">
+                    <ngx-datatable-column name="Name" [sortable]="true" prop="Name">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <a routerLink="/characters/{{row.Name}}">{{row.Name}}</a>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Rank" [sortable]="true" prop="Rank">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Rank}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Class" [sortable]="true" prop="Class">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Class}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Level" [sortable]="true" prop="Level">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Level}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Race" [sortable]="true" prop="Race">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Race}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Gender" [sortable]="true" prop="Gender">
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{row.Gender}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Actions" [sortable]="false" prop="Name" *ngIf="isAdmin">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <button type="button" class="btn btn-sm btn-primary" (click)="navToChar(row)"><i class="fa fa-dot-circle-o"></i>
+                                Select</button>
+                            <button type="button" class="btn btn-sm btn-warning" (click)="navToCharEdit(row)"><i class="fa fa-dot-circle-o"></i>
+                                Edit</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

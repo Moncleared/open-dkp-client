@@ -1,0 +1,105 @@
+<div class="row">
+    <div class="col"></div>
+    <div class="col-lg-6">
+        <div class="card" *ngIf="isToggled">
+            <div class="card-header">
+                <strong>Select Raid from Below</strong>
+            </div>
+            <div class="card-body">
+                <h4>30 Day Lookback</h4>
+                <p>Below are a list of raids in which you were credited for attending ONLY PART of the raid.</p>
+                <ul>
+                    <li><strong>Please Note:</strong> If you missed an entire raid, it will NOT show up in this list</li>
+                    <li>Click a raid below to see and request credit for specific raid ticks missed</li>
+                </ul>
+                <ngx-datatable class="bootstrap" [rows]="RaidList" [headerHeight]="30" [footerHeight]="30" [limit]="15" [columnMode]="'force'" [rowHeight]="'auto'">
+                    <ngx-datatable-column name="Name" [sortable]="true" prop="Name">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <a [routerLink]="" (click)="switchToTickView(row)">{{row.Name}}</a>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Pool" [sortable]="true" prop="Pool.Name">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Pool.Name}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Date" [sortable]="true" prop="Timestamp">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Timestamp | date:'MM/dd/yyyy'}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Attended / Total" [sortable]="true" prop="Ticks">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Ticks.length}} / {{row.TotalTicks}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+            <div class="card-footer">
+                <a [routerLink]="['/raids/charselect']">Back to Characters</a>
+            </div>
+        </div>
+        <div class="card" *ngIf="!isToggled">
+            <div class="card-header">
+                <strong>{{SelectedRaid.Name}} ({{SelectedRaid.Timestamp | date:'MM/dd/yyyy'}})</strong>
+            </div>
+            <div class="card-body">
+                <p>You attended {{SelectedRaid.Ticks.length}} out of {{SelectedRaid.TotalTicks}}. You are missing from the {{SelectedRaidTicks.length}} listed below:</p>
+                <ngx-datatable class="bootstrap" [rows]="SelectedRaidTicks" [headerHeight]="30" [footerHeight]="30" [limit]="50" [columnMode]="'force'" [rowHeight]="'auto'">
+                    <!-- Description Column-->
+                    <ngx-datatable-column name="Description" [sortable]="true" [minWidth]="100" prop="Description">
+                        <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                            <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+                        </ng-template>
+                        <ng-template let-row="row" ngx-datatable-cell-template>
+                            {{row.Description}}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <!-- Value Column-->
+                    <ngx-datatable-column name="Value" [sortable]="true" prop="Value">
+                        <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                            <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+                        </ng-template>
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            {{row.Value}}
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                    <ngx-datatable-column name="Action" [sortable]="true">
+                        <ng-template let-column="column" ngx-datatable-header-template>
+                            {{column.name}}
+                        </ng-template>
+                        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                            <a *ngIf="row.ActionPending" [routerLink]="['/profile']">Request Pending</a>
+                            <a *ngIf="!row.ActionPending" [routerLink]="" (click)="openModal(template,row)">Request Credit for this Tick</a>
+                        </ng-template>
+                    </ngx-datatable-column>
+
+                </ngx-datatable>
+            </div>
+            <div class="card-footer">
+                <div style="margin-top: 10px" *ngFor="let alert of alerts">
+                    <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                </div>
+                <a [routerLink]="" (click)="toggleView()">Return to Raids</a>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+    <ng-template #template>
+        <div class="modal-header">
+            <h4 class="modal-title">Proof of Attendance</h4>
+            <button type="button" class="close" (click)="modalRef.hide()" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <textarea [(ngModel)]="LogData" id="textarea-input" name="textarea-input" rows="9" class="form-control" placeholder="Paste Log or Reason here"></textarea>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modalRef.hide()">Cancel</button>
+            <button type="button" class="btn btn-success" (click)="submitRequest()">Confirm</button>
+        </div>
+    </ng-template>
+</div>

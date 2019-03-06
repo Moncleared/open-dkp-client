@@ -1,0 +1,50 @@
+<div class="row align-items-center">
+    <div class="col"></div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="icon-drop"></i> Item History
+            </div>
+            <div class="card-body">
+                <div class="clearfix">
+                    <div class="float-right">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Filter</span>
+                            </div>
+                            <input (keyup)="onKey($event)" [(ngModel)]="filterBy" placeholder="filter text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <ngx-datatable class="bootstrap" [rows]="ItemList" [headerHeight]="30" [footerHeight]="30" [limit]="15" [columnMode]="'force'" [rowHeight]="'auto'">
+                    <ngx-datatable-column name="Character" [sortable]="true" prop="CharacterName">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <a routerLink="/characters/{{row.CharacterName}}">{{row.CharacterName}}</a>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Item" [sortable]="true" prop="ItemName">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <a href="https://eq.magelo.com/item/{{row.ItemID}}" attr.data-lucy="item={{row.ItemID}}">{{row.ItemName}}</a>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="DKP" [sortable]="true" prop="DKP">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.DKP}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Date" [sortable]="true" prop="Timestamp">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Timestamp | date:'MM/dd/yyyy'}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Raid" [sortable]="true" prop="Raid">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <a routerLink="/raids/{{row.IdRaid}}">{{row.Raid}}</a>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>

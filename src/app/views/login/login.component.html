@@ -1,0 +1,97 @@
+<div class="row">
+    <div class="col"></div>
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-header">
+                Login
+            </div>
+            <div class="card-body">
+                <form action="" method="post">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Username</span>
+                            </div>
+                            <input #input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="username">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
+                        <span class="help-block">*Username is case sensitive!</span>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Password</span>
+                            </div>
+                            <input (keyup.enter)="authenticate()" name="password" type="password" class="form-control" placeholder="Password" [(ngModel)]="password">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-asterisk"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button name="authButton" type="button" class="btn btn-primary px-4" (click)="authenticate()">Login</button>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button type="button" class="btn btn-link px-0" [routerLink]="['/forgot']">Forgot password</button> |
+                            <button type="button" class="btn btn-link px-0" [routerLink]="['/register']">Register</button>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="errorMessage" style="margin-top:10px">
+                        <div class="col-12">
+                            <div class="alert alert-danger" role="alert">{{errorMessage}}</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col"></div>
+</div>
+
+<!--
+
+<div class="row align-items-center">
+  <div class="col"></div>
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <form name='login'>
+          <h1>Login</h1>
+          <p class="text-muted">Sign In to your account</p>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-user"></i></span>
+            </div>
+            <input #input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="username">
+            <span class="help-block">This is a help text</span>
+          </div>
+          <div class="input-group mb-4">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="icon-lock"></i></span>
+            </div>
+            <input (keyup.enter)="authenticate()" name="password" type="password" class="form-control" placeholder="Password" [(ngModel)]="password" >
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <button name="authButton" type="button" class="btn btn-primary px-4" (click)="authenticate()">Login</button>
+            </div>
+            <div class="col-6 text-right">
+              <button type="button" class="btn btn-link px-0" [routerLink]="['/forgot']">Forgot password</button> |
+              <button type="button" class="btn btn-link px-0" [routerLink]="['/register']">Register</button>
+            </div>
+          </div>
+          <div class="row" *ngIf="errorMessage" style="margin-top:10px">
+            <div class="col-12">
+              <div class="alert alert-danger" role="alert">{{errorMessage}}</div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col"></div>
+</div>
+-->

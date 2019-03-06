@@ -1,0 +1,68 @@
+<app-header [fixed]="true" [navbarBrandFull]="clientLogo" [navbarBrandMinimized]="{src: 'assets/img/favicon.ico', width: 30, height: 30, alt: 'OGC'}" [sidebarToggler]="'lg'" [asideMenuToggler]="false">
+    <ul class="nav navbar-nav d-md-down-none">
+        <!---->
+        <li class="nav-item px-3">
+            <a class="nav-link" href="#">Dashboard</a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" href="{{clientDetails.Forums}}">Forums</a>
+        </li>
+        <li class="nav-item px-3">
+            <a class="nav-link" [routerLink]="['/chat']">Bidding Tool</a>
+        </li>
+    </ul>
+    <ul class="nav navbar-nav ml-auto">
+        <li *ngIf="requestCount>0 && isAdmin" class="nav-item d-md-down-none">
+            <a class="nav-link" [routerLink]="['/admin']"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">{{requestCount}}</span></a>
+        </li>
+        <li *ngIf="!isAuthenticated" class="nav-item px-3">
+            <a class="nav-link" [routerLink]="['/login']">Login</a>
+        </li>
+        <li *ngIf="isAuthenticated" class="nav-item dropdown" dropdown placement="bottom right">
+            <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" dropdownToggle (click)="false">
+                <img src="assets/img/avatars/generic-avatar.png" class="img-avatar" alt="admin@bootstrapmaster.com" />
+            </a>
+            <div class="dropdown-menu dropdown-menu-right" *dropdownMenu aria-labelledby="simple-dropdown">
+                <div class="dropdown-header text-center"><strong>Settings</strong></div>
+                <a class="dropdown-item" [routerLink]="['/profile']"><i class="fa fa-user"></i> Profile</a>
+                <a *ngIf="isAdmin" class="dropdown-item" [routerLink]="['/admin']"><i class="fa fa-key"></i> Admin</a>
+                <div class="divider"></div>
+                <a class="dropdown-item" (click)="logout()"><i class="fa fa-lock"></i> Logout</a>
+            </div>
+        </li>
+    </ul>
+</app-header>
+<div class="app-body">
+    <app-sidebar [fixed]="true" [display]="'lg'">
+        <app-sidebar-nav [navItems]="sideNavItems" [perfectScrollbar] [disabled]="sidebarMinimized"></app-sidebar-nav>
+        <div class="d-flex justify-content-center">
+            <img src="assets/img/brand/opendkp-small-white-logo.png">
+        </div>
+        <app-sidebar-minimizer></app-sidebar-minimizer>
+    </app-sidebar>
+    <!-- Main content -->
+    <main class="main">
+        <!-- Breadcrumb -->
+        <ol class="breadcrumb">
+            <app-breadcrumb></app-breadcrumb>
+            <!-- Breadcrumb Menu-->
+            <li class="breadcrumb-menu d-md-down-none">
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <a class="btn" [routerLink]="" (click)="showDkpModal()"><i class="icon-graph"></i> &nbsp;DKP Info</a>
+                </div>
+            </li>
+        </ol>
+        <loading-data *ngIf="isLoading"></loading-data>
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
+        </div><!-- /.container-fluid -->
+    </main>
+    <div bsModal #smallModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>
+</div>
+<app-footer>
+    <span><a href="{{clientDetails.Website}}">{{clientDetails.Name}}</a></span>
+    <span class="ml-auto">
+        <img src="assets/img/brand/opendkp-small-white-logo.png">
+        <span class="align-bottom"> by Moncs (Phinigel Server)</span>
+    </span>
+</app-footer>

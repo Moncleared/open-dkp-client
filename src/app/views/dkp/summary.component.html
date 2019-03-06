@@ -1,0 +1,159 @@
+<div class="animated fadeIn">
+    <div class="row" *ngIf="clientDetails.Subdomain==='ogc'">
+        <div class="col-12 back-image" style="height: 400px">
+
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg" *ngFor="let model of modelArray">
+            <classcard [inputModel]="model"></classcard>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Filter by Rank</strong>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-form-label">
+                            <div *ngFor="let rank of rankArray" class="form-check form-check-inline mr-{{rank}}">
+                                <input class="form-check-input" [(ngModel)]="rank.IsChecked" type="checkbox" id="inline-{{rank.CharacterRank}}" value="{{rank.CharacterRank}}">
+                                <label class="form-check-label" for="inline-{{rank}}">{{rank.CharacterRank}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" (click)="applyFilters()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Apply</button>
+                    <button type="submit" (click)="selectAllRanks()" class="btn btn-sm btn-warning">Select All</button>
+                    <button type="submit" (click)="clearAllRanks()" class="btn btn-sm btn-warning">Clear All</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Filter by Class</strong>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <div class="col-form-label">
+                            <div *ngFor="let rank of classArray" class="form-check form-check-inline mr-{{rank}}">
+                                <input class="form-check-input" [(ngModel)]="rank.IsChecked" type="checkbox" id="inline-{{rank.CharacterClass}}" value="{{rank.CharacterClass}}">
+                                <label class="form-check-label" for="inline-{{rank}}">{{rank.CharacterClass}}</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" (click)="applyFilters()" class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Apply</button>
+                    <button type="submit" (click)="selectAllClass()" class="btn btn-sm btn-warning">Select All</button>
+                    <button type="submit" (click)="clearAllClass()" class="btn btn-sm btn-warning">Clear All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group" style="width: 200px">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"># of Rows</span>
+            </div>
+            <select class="form-control" id="Active" name="Active" (ngModelChange)="onPageChange($event)" [(ngModel)]="pageLimit" required>
+                <option [value]="25">25</option>
+                <option [value]="50">50</option>
+                <option [value]="100">100</option>
+                <option [value]="250">250</option>
+                <option [value]="1000">1000</option>
+            </select>
+        </div>
+    </div>
+    <ngx-datatable class="bootstrap" [rows]="fModel.Models" [headerHeight]="30" [footerHeight]="30" [limit]="pageLimit" [columnMode]="'force'" [rowHeight]="'auto'">
+        <!-- Index Column-->
+        <ngx-datatable-column name="#" [maxWidth]=75 [sortable]="true">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                {{rowIndex+1}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <!-- Name Column-->
+        <ngx-datatable-column name="Name" [sortable]="true" [flexGrow]="3" [minWidth]="100" prop="CharacterName">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" ngx-datatable-cell-template>
+                <a routerLink="/characters/{{row.CharacterName}}">{{row.CharacterName}}</a>
+            </ng-template>
+        </ngx-datatable-column>
+
+
+        <!-- Rank Column-->
+        <ngx-datatable-column name="Rank" [sortable]="true" [flexGrow]="1" prop="CharacterRank">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{row.CharacterRank}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <!-- Current DKP Column-->
+        <ngx-datatable-column name="Current DKP" [sortable]="true" [flexGrow]="3" [minWidth]="100" prop="CurrentDKP">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{row.CurrentDKP | number:'1.0-0'}}
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="30 Day" [sortable]="true" [flexGrow]="1" prop="Calculated_30">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{row.Calculated_30 | percent:'1.0-0'}} ({{row.AttendedTicks_30}} / {{row.TotalTicks_30}})</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="60 Day" [sortable]="true" [flexGrow]="1" prop="Calculated_60">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{row.Calculated_60 | percent:'1.0-0'}} ({{row.AttendedTicks_60}} / {{row.TotalTicks_60}})</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="90 Day" [sortable]="true" [flexGrow]="1" prop="Calculated_90">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{row.Calculated_90 | percent:'1.0-0'}} ({{row.AttendedTicks_90}} / {{row.TotalTicks_90}})</span>
+            </ng-template>
+        </ngx-datatable-column>
+
+        <ngx-datatable-column name="Life" [sortable]="true" [flexGrow]="1" prop="Calculated_Life">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{row.Calculated_Life | percent:'1.0-0'}} ({{row.AttendedTicks_Life}} / {{row.TotalTicks_Life}})</span>
+            </ng-template>
+        </ngx-datatable-column>
+        
+        <ngx-datatable-column name="Life Ticks" [sortable]="true" [flexGrow]="1" prop="AttendedTicks_Life">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{row.AttendedTicks_Life}}</span>
+            </ng-template>
+        </ngx-datatable-column>
+    </ngx-datatable>
+</div>

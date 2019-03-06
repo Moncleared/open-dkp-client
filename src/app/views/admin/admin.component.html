@@ -1,0 +1,187 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Admin Links & Utilities</strong>
+                </div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-action" routerLink="/admin/roster">Guild Roster Tool</a>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-action" routerLink="/admin/usergroups">Add/Remove Admins</a>
+                    </div>
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-action" routerLink="/admin/audit">Audit Tool</a>
+                    </div>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <strong>Requests</strong>
+                </div>
+                <div class="card-body">
+                    <tabset>
+                        <tab>
+                            <ng-template tabHeading><i class="icon-basket-loaded"></i> Pending Requests</ng-template>
+                            <ngx-datatable class="bootstrap" [rows]="PendingRequestList" [headerHeight]="30" [footerHeight]="30" [limit]="10" [columnMode]="'force'" [rowHeight]="'auto'">
+                                <ngx-datatable-column name="Requestor" [sortable]="true" prop="Requestor">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{row.Requestor}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Type" [sortable]="true" prop="RequestType">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{RequestType[row.RequestType]}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Date" [sortable]="true" prop="RequestTimestamp">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{row.RequestTimestamp | date:'MM/dd/yyyy'}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="" [sortable]="true" prop="" [minWidth]="250">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        <button type="button" class="btn btn-sm btn-primary" (click)="requestDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
+                                        <button type="button" class="btn btn-sm btn-success" (click)="approveRequest(row)"><i class="fa fa-dot-circle-o"></i> Approve</button>
+                                        <button type="button" class="btn btn-sm btn-danger" (click)="denyRequest(row)"><i class="fa fa-dot-circle-o"></i> Deny</button>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                            </ngx-datatable>
+                        </tab>
+                        <tab>
+                            <ng-template tabHeading><i class="icon-basket-loaded"></i> Denied Requests</ng-template>
+                            <ngx-datatable class="bootstrap" [rows]="DeniedRequestList" [headerHeight]="30" [footerHeight]="30" [limit]="10" [columnMode]="'force'" [rowHeight]="'auto'">
+                                <ngx-datatable-column name="Requestor" [sortable]="true" prop="Requestor">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{row.Requestor}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Type" [sortable]="true" prop="RequestType">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{RequestType[row.RequestType]}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Date" [sortable]="true" prop="RequestTimestamp">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{row.RequestTimestamp | date:'MM/dd/yyyy'}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="" [sortable]="true" prop="" [minWidth]="250">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        <button type="button" class="btn btn-sm btn-primary" (click)="requestDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                            </ngx-datatable>
+                        </tab>
+                        <tab>
+                            <ng-template tabHeading><i class="icon-basket-loaded"></i> Approved Requests</ng-template>
+                            <ngx-datatable class="bootstrap" [rows]="ApprovedRequestList" [headerHeight]="30" [footerHeight]="30" [limit]="10" [columnMode]="'force'" [rowHeight]="'auto'">
+                                <ngx-datatable-column name="Requestor" [sortable]="true" prop="Requestor">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{row.Requestor}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Type" [sortable]="true" prop="RequestType">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{RequestType[row.RequestType]}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="Date" [sortable]="true" prop="RequestTimestamp">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        {{row.RequestTimestamp | date:'MM/dd/yyyy'}}
+                                    </ng-template>
+                                </ngx-datatable-column>
+                                <ngx-datatable-column name="" [sortable]="true" prop="" [minWidth]="250">
+                                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                        <button type="button" class="btn btn-sm btn-primary" (click)="requestDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
+                                    </ng-template>
+                                </ngx-datatable-column>
+                            </ngx-datatable>
+                        </tab>
+                    </tabset>
+                </div>
+                <div class="card-footer">
+                    <div *ngFor="let alert of alerts">
+                        <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <strong>DKP Information</strong>
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="BRV">Base Raid Value (BRV)</label>
+                        <div class="col-md-9">
+                            <input type="number" id="BRV" class="form-control" placeholder="BRV" [(ngModel)]="dkpModel.BRV" name="BRV">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="MinBid">Minimum Bid</label>
+                        <div class="col-md-9">
+                            <input type="number" id="MinBid" class="form-control" placeholder="MinBid" [(ngModel)]="dkpModel.MinBid" name="MinBid">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="Description">Minimum Bid Increase</label>
+                        <div class="col-md-9">
+                            <input type="number" id="MinBidInc" class="form-control" placeholder="MinBidInc" [(ngModel)]="dkpModel.MinBidInc" name="MinBidInc">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="DKPCap">DKP Cap</label>
+                        <div class="col-md-9">
+                            <input type="number" id="DKPCap" class="form-control" placeholder="DKPCap" [(ngModel)]="dkpModel.DKPCap" name="DKPCap">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="MaxBidMain">Max Bid (Main/PALT)</label>
+                        <div class="col-md-9">
+                            <input type="text" id="MaxBidMain" class="form-control" placeholder="MaxBidMain" [(ngModel)]="dkpModel.MaxBidMain" name="MaxBidMain">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="MaxBidAlt">Max Bid (ALT)</label>
+                        <div class="col-md-9">
+                            <input type="text" id="MaxBidAlt" class="form-control" placeholder="MaxBidAlt" [(ngModel)]="dkpModel.MaxBidAlt" name="MaxBidAlt">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="LowRABid">Below 40% RA Max Bid</label>
+                        <div class="col-md-9">
+                            <input type="text" id="LowRABid" class="form-control" placeholder="LowRABid" [(ngModel)]="dkpModel.MaxBidRA" name="LowRABid">
+                        </div>
+                    </div>
+                    <button type="submit" [disabled]="isLoading" class="btn btn-sm btn-success" (click)="updateDkpInfo()">
+                        <i class="fa fa-dot-circle-o"></i> Save</button>
+                </div>
+                <div class="card-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div bsModal #smallModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-danger" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure?</h4>
+                    <button type="button" class="close" (click)="smallModal.hide()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this raid?&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="smallModal.hide()">Cancel</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

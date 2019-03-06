@@ -1,0 +1,28 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <ngx-datatable class="bootstrap" [rows]="Audits" [headerHeight]="30" [footerHeight]="30" [limit]="10" [columnMode]="'force'" [rowHeight]="'auto'">
+                <ngx-datatable-column name="Username" [sortable]="true" prop="CognitoUser">
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        {{row.CognitoUser}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Action" [sortable]="true" prop="Action">
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        {{row.Action}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="Timestamp" [sortable]="true" prop="Timestamp">
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        {{row.Timestamp | date:'MM/dd/yyyy'}}
+                    </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column name="" [sortable]="true" prop="" [minWidth]="250">
+                    <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                        <button type="button" class="btn btn-sm btn-primary" (click)="auditDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+</div>

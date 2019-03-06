@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h4 class="modal-title">Audit Details</h4>
+    <button type="button" class="close" (click)="bsModalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="card">
+        <div class="card-header">
+            <div class="float-left">
+                <strong>Audit Explorer</strong>
+            </div>
+        </div>
+        <div class="card-body">
+            <ngx-json-viewer [json]="inputModel" [expanded]="false"></ngx-json-viewer>
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Ok</button>
+</div>

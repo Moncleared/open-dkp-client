@@ -1,0 +1,132 @@
+<div class="animated fadeIn">
+    <div class="row align-items-center">
+        <div class="col"></div>
+        <div class="col-md-8">
+            <!-- Raid Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="clearfix">
+                        <div class="float-left">
+                            <strong>Raid Details</strong>
+                        </div>
+                        <div class="float-right">
+                            <button type="button" class="btn btn-sm btn-warning" *ngIf="isAdmin" (click)="navToRaidEdit(row)"><i class="fa fa-dot-circle-o"></i> Edit</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Raid Name</span>
+                                </div>
+                                <input readonly type="text" [(ngModel)]="raidModel.Name" id="raidname" name="raidname" class="form-control" placeholder="Enter Raid Name">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-gavel"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Date</span>
+                                </div>
+                                <input readonly type="text" id="Timestamp" class="form-control" placeholder="Datepicker" [(ngModel)]="raidModel.Timestamp" name="Timestamp" bsDatepicker [bsValue]="bsValue" [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" [isDisabled]="true" placeholder="Click to select date">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">DKP Pool</span>
+                                </div>
+                                <input readonly type="text" [(ngModel)]="raidModel.Pool.Description" id="raidpool" name="raidpool" class="form-control">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-bus"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Raid Tick Card -->
+                    <div class="card" style="Margin-Top:25px">
+                        <div class="card-header">
+                            <strong>Raid Ticks</strong>
+                        </div>
+                        <div class="card-body">
+                            <tabset>
+                                <tab *ngFor="let vTick of raidModel.Ticks" [heading]="vTick.Description">
+                                    <div class="row">
+                                        <p>Tick is worth {{vTick.Value}} dkp</p>
+                                    </div>
+                                    <div class="row">
+                                        <div *ngFor="let vPlayer of vTick.Attendees">
+                                            <button routerLink="/characters/{{vPlayer}}" style="width:75px; margin: 10px;" type="button" class="btn btn-sm btn-primary">{{vPlayer}}</button>
+                                        </div>
+                                    </div>
+                                </tab>
+                            </tabset>
+                        </div>
+                        <div class="card-footer"></div>
+                    </div>
+                    <!-- Item Card -->
+                    <div class="card" style="Margin-Top:25px">
+                        <div class="card-header">
+                            <strong>Items</strong>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Item</th>
+                                            <th>DKP</th>
+                                            <th>Character</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let vModel of raidModel.Items">
+                                            <!--<td><a href="https://eq.magelo.com/item/{{vModel.ItemID}}">{{vModel.ItemName}}</a></td>-->
+                                            <td><a href="https://eq.magelo.com/item/{{vModel.ItemID}}" attr.data-lucy="item={{vModel.ItemID}}">{{vModel.ItemName}}</a></td>
+                                            <td>{{vModel.DkpValue}}</td>
+                                            <td>{{vModel.CharacterName}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div style="margin-top: 10px" *ngFor="let alert of alerts">
+                        <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+    <div bsModal #smallModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-danger" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure?</h4>
+                    <button type="button" class="close" (click)="smallModal.hide()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this raid?&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="smallModal.hide()">Cancel</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</div>

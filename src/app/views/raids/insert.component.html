@@ -1,0 +1,263 @@
+<div class="animated fadeIn">
+    <div class="row align-items-center">
+        <div class="col"></div>
+        <div class="col-md-8">
+            <!-- Raid Card -->
+            <div class="card">
+                <div class="card-header">
+                    <strong>Raid Details</strong>
+                </div>
+                <div class="card-body">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Raid Name</span>
+                                </div>
+                                <input type="text" [(ngModel)]="raidModel.Name" id="raidname" name="raidname" class="form-control" placeholder="Enter Raid Name">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-gavel"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Date</span>
+                                </div>
+                                <input type="text" id="Timestamp" class="form-control" placeholder="Datepicker" [(ngModel)]="raidModel.Timestamp" name="Timestamp" bsDatepicker [bsValue]="bsValue" [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }" placeholder="Click to select date">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">DKP Pool</span>
+                                </div>
+                                <select [compareWith]="compareFn" class="form-control" id="pool" name="pool" [(ngModel)]="raidModel.Pool" required>
+                                    <option *ngFor="let pool of pools" [ngValue]="pool">{{pool.Description}}</option>
+                                </select>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-bus"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- Raid Tick Card -->
+                    <div class="card" style="Margin-Top:25px">
+                        <div class="card-header">
+                            <strong>Raid Ticks</strong>
+                        </div>
+                        <div *ngIf="raidModel.Ticks?.size > 0" class="card-body">
+                            <div class="row">
+                                <p>Click the buttons below to Edit the Raid Ticks, add attendees and assign dkp values
+                                    to each tick</p>
+                            </div>
+                            <div class="row">
+                                <div *ngFor="let vTick of raidModel.Ticks">
+                                    <button style="margin-left: 10px; margin-top: 10px" type="button" class="btn btn-sm btn-primary" (click)="showModal(vTick)" [disabled]="disabled">{{vTick.Description}}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="!(raidModel.Ticks?.size > 0)" class="card-body">
+                            <p>You have not created any raid ticks yet. Click the Generate Template Raid button below to auto generate pre-defined raid ticks or use the Tick Name textbox and Create Tick button below to generate them manually.</p>
+                            <p>Once you create a raid tick, on the far right drop down box you can CLONE or DELETE raid ticks individually.</p>
+                            <p>Once a raid tick is created, it will become a button which you can click to edit the details of that raid tick individually.</p>
+                            <button type="button" class="btn btn-primary" (click)="generateTemplate()" [disabled]="disabled">Generate
+                                Template Raid</button>
+                        </div>
+                        <div class="card-footer">
+                            <div class="clearfix">
+                                <div class="float-left">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Tick Name</span>
+                                        </div>
+                                        <input type="text" id="tickname" name="tickname" class="form-control" [(ngModel)]="tickName">
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary" (click)="createEmptyTick()" [disabled]="disabled">Create
+                                                Tick</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="float-right">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Raid Tick</span>
+                                        </div>
+                                        <select class="form-control" id="ticks" name="ticks" [(ngModel)]="selectedTick">
+                                            <option *ngFor="let tick of raidModel.Ticks" [ngValue]="tick">{{tick.Description}}</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary" (click)="cloneTick()" [disabled]="disabled">Clone</button>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-danger" (click)="removeRaidTick()" [disabled]="disabled">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item Card -->
+                    <div class="card" style="Margin-Top:25px">
+                        <div class="card-header">
+                            <strong>Items</strong>
+                        </div>
+                        <div class="card-body">
+                            <p>Items awarded for this raid are listed in the below table</p>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="clearfix">
+                                        <div class="float-right">
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <span class="input-group-text">Item Filter</span>
+                                                </div>
+                                                <input (keyup)="onKey($event)" [(ngModel)]="filterBy" placeholder="filter text" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <ngx-datatable class="bootstrap" [rows]="FilteredItems" [headerHeight]="30" [footerHeight]="30" [limit]="10" [columnMode]="'force'" [rowHeight]="'auto'">
+
+                                        <ngx-datatable-column name="Item" [sortable]="true" prop="ItemName">
+                                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                <a href="https://eq.magelo.com/item/{{row.ItemID}}" attr.data-lucy="item={{row.ItemID}}">{{row.ItemName}}</a>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column name="Item ID" [sortable]="true" prop="ItemID">
+                                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                {{row.ItemID}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column name="DKP" [sortable]="true" prop="DkpValue">
+                                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                {{row.DkpValue}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column name="CharacterName" [sortable]="true" prop="CharacterName">
+                                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                {{row.CharacterName}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column name="" prop="">
+                                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                                <button type="button" class="btn btn-sm btn-warning" (click)="updateItem(row)" [disabled]="disabled"><i class="fa fa-dot-circle-o"></i> Edit</button>
+                                                <button type="button" class="btn btn-sm btn-danger" (click)="removeItem(row)" [disabled]="disabled"><i class="fa fa-dot-circle-o"></i> Delete</button>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                    </ngx-datatable>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <tabset class="col-lg-12">
+                                    <tab>
+                                        <ng-template tabHeading><i class="icon-basket-loaded"></i> Add Items Manually</ng-template>
+                                        <ul>
+                                            <li>In order to add an item manually, you must specify the Item Name, Character Name and DKP Value for the item</li>
+                                            <li>Item Name will auto-complete/suggest once you've typed 4 or more characters</li>
+                                            <li>If you enter a character that doesn't exist in the database, that character will be auto created!</li>
+                                            <li>Double check that the character name is correct!</li>
+                                        </ul>
+                                        <div class="clearfix">
+                                            <div class="float-left">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Item Name</span>
+                                                    </div>
+                                                    <input [(ngModel)]="newItem.ItemName" [typeaheadItemTemplate]="customItemTemplate" (typeaheadLoading)="changeTypeaheadLoading($event)" [typeahead]="searchedItems" [typeaheadMinLength]="4" typeaheadOptionField="ItemName" typeaheadWaitMs="200" (typeaheadOnSelect)="typeaheadOnSelect($event)" placeholder="Items loaded async" class="form-control">
+
+                                                    <ng-template #customItemTemplate let-model="item" let-index="index">
+                                                        <h5>{{model.ItemName}} ({{model.ItemID}})</h5>
+                                                    </ng-template>
+                                                    <div *ngIf="isItemLoading" class="input-group-append">
+                                                        <span class="input-group-text"><i class="fa fa-circle-o-notch fa-spin"></i></span>
+                                                    </div>
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">Character Name</span>
+                                                    </div>
+                                                    <input [(ngModel)]="newItem.CharacterName" [typeahead]="searchedCharacters" [typeaheadMinLength]="2" typeaheadWaitMs="100" placeholder="Items loaded async" class="form-control">
+
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text">DKP Value</span>
+                                                    </div>
+                                                    <input type="text" id="dkpValue" name="dkpValue" class="form-control" [(ngModel)]="newItem.DkpValue">
+                                                    <button type="button" class="btn btn-success" (click)="addItem()" [disabled]="disabled">Add Item</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </tab>
+                                    <tab>
+                                        <ng-template tabHeading><i class="icon-basket-loaded"></i> Add Items Bulk</ng-template>
+                                        <p>You can mass add items by following the format: item name ; price ; character gratss <br>
+                                            The keyword is 'gratss' which you can use to say in guild or raid and later pick up via gamparse search<br>
+                                            Valid examples include:</p>
+                                        <ul>
+                                            <li>[Wed Feb 13 19:43:06 2019] You say to your guild, 'Fractured Coeval Incandessence ; 3000 ; Danae Gratss'</li>
+                                            <li>fractured coeval incandessence ; 3000 ; danae gratss</li>
+                                            <li>Fractured Coeval Incandessence;3000;Danae Gratss</li>
+                                        </ul>
+                                        <p>Each line will be treated as an independent item, if the line does not follow the appropriate format or there was an error processing the line
+                                            it will remain in the textarea after all processing has finished. Remaining lines of text should be reviewed for errors and corrections!
+                                        </p>
+                                        <div class="clearfix">
+                                            <h3>Bulk Upload</h3>
+                                            <p>Paste the Item Data here</p>
+                                            <textarea [disabled]="disabled" [(ngModel)]="bulkItems" id="textarea-input" name="textarea-input" rows="9" class="form-control" placeholder="Item dump"></textarea>
+                                            <div>
+                                                <button type="button" class="btn btn-primary" (click)="bulkAddItems()" [disabled]="disabled">Add Items</button>
+                                            </div>
+                                        </div>
+                                    </tab>
+                                </tabset>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <button type="button" class="btn btn-success" (click)="saveRaid()" [disabled]="disabled">Save
+                            Raid</button>
+                        <div *ngIf="raidModel.IdRaid">
+                            <button type="button" class="btn btn-danger" (click)="smallModal.show()" [disabled]="disabled">Delete
+                                Raid</button>
+                        </div>
+                        <button type="button" class="btn btn-warning" (click)="navToRaids()" [disabled]="disabled">Cancel</button>
+                    </div>
+                    <div style="margin-top: 10px" *ngFor="let alert of alerts">
+                        <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+    <div bsModal #smallModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-danger" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Are you sure?</h4>
+                    <button type="button" class="close" (click)="smallModal.hide()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this raid?&hellip;</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" (click)="smallModal.hide()">Cancel</button>
+                    <button type="button" class="btn btn-danger" (click)="deleteRaid()">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

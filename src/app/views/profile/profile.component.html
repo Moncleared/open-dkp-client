@@ -1,0 +1,164 @@
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-body p-4">
+                <h1>Hello, {{Nickname}}</h1>
+                <p class="text-muted">Welcome to your profile page!</p>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Username</span>
+                        </div>
+                        <input type="text" disabled id="Username" [(ngModel)]="Username" name="Username" class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-user-circle"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Nickname</span>
+                        </div>
+                        <input type="text" disabled id="nick" [(ngModel)]="Nickname" name="nick" class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-user-circle-o"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Email</span>
+                        </div>
+                        <input type="text" disabled id="email" [(ngModel)]="Email" name="email" class="form-control">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-envelope-open-o"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <strong>Characters</strong>
+            </div>
+            <div class="card-body">
+                <ngx-datatable class="bootstrap" [rows]="CharacterList" [headerHeight]="30" [footerHeight]="30" [limit]="5" [columnMode]="'force'" [rowHeight]="'auto'">
+                    <ngx-datatable-column name="Name" [sortable]="true" prop="Name">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <a routerLink="/characters/{{row.Name}}">{{row.Name}}</a>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Rank" [sortable]="true" prop="Rank">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Rank}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Class" [sortable]="true" prop="Class">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Class}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Level" [sortable]="true" prop="Level">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Level}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Actions" [sortable]="false" prop="None">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <button type="button" class="btn btn-sm btn-primary" (click)="navToChar(row)"><i class="fa fa-dot-circle-o"></i>
+                                Select</button>
+                            <button type="button" class="btn btn-sm btn-warning" (click)="navToCharEdit(row)"><i class="fa fa-dot-circle-o"></i>
+                                Edit</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <strong>Requests</strong>
+            </div>
+            <div class="card-body">
+                <tabset>
+                    <tab>
+                        <ng-template tabHeading><i class="icon-basket-loaded"></i> Pending Requests</ng-template>
+                        <ngx-datatable class="bootstrap" [rows]="PendingRequestList" [headerHeight]="30" [footerHeight]="30" [limit]="10" [columnMode]="'force'" [rowHeight]="'auto'">
+                            <ngx-datatable-column name="Requestor" [sortable]="true" prop="Requestor">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{row.Requestor}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Type" [sortable]="true" prop="RequestType">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{RequestType[row.RequestType]}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Date" [sortable]="true" prop="RequestTimestamp">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{row.RequestTimestamp | date:'MM/dd/yyyy'}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="" [sortable]="true" prop="" [minWidth]="250">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    <button type="button" class="btn btn-sm btn-primary" (click)="requestDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </tab>
+                    <tab>
+                        <ng-template tabHeading><i class="icon-basket-loaded"></i> Denied Requests</ng-template>
+                        <ngx-datatable class="bootstrap" [rows]="DeniedRequestList" [headerHeight]="30" [footerHeight]="30" [limit]="10" [columnMode]="'force'" [rowHeight]="'auto'">
+                            <ngx-datatable-column name="Requestor" [sortable]="true" prop="Requestor">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{row.Requestor}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Type" [sortable]="true" prop="RequestType">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{RequestType[row.RequestType]}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Date" [sortable]="true" prop="RequestTimestamp">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{row.RequestTimestamp | date:'MM/dd/yyyy'}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="" [sortable]="true" prop="" [minWidth]="250">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    <button type="button" class="btn btn-sm btn-primary" (click)="requestDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </tab>
+                    <tab>
+                        <ng-template tabHeading><i class="icon-basket-loaded"></i> Approved Requests</ng-template>
+                        <ngx-datatable class="bootstrap" [rows]="ApprovedRequestList" [headerHeight]="30" [footerHeight]="30" [limit]="10" [columnMode]="'force'" [rowHeight]="'auto'">
+                            <ngx-datatable-column name="Requestor" [sortable]="true" prop="Requestor">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{row.Requestor}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Type" [sortable]="true" prop="RequestType">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{RequestType[row.RequestType]}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Date" [sortable]="true" prop="RequestTimestamp">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    {{row.RequestTimestamp | date:'MM/dd/yyyy'}}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="" [sortable]="true" prop="" [minWidth]="250">
+                                <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                    <button type="button" class="btn btn-sm btn-primary" (click)="requestDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </tab>
+                </tabset>
+            </div>
+        </div>
+    </div>
+</div>

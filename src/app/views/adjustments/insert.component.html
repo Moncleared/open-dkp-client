@@ -1,0 +1,62 @@
+<div class="animated fadeIn">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header">
+          <strong>Add Adjustment</strong>
+        </div>
+        <div class="card-body">
+          <form #adjustmentForm="ngForm" (ngSubmit)="onSubmit()">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="Character">Character Name(s)</label>
+              <div class="col-md-9">
+                <textarea [(ngModel)]="model.Character" id="textarea-input" name="textarea-input" rows="4" class="form-control" placeholder="Enter character names separated by commas"></textarea>                
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="Reason">Reason</label>
+              <div class="col-md-9">
+                <input type="text" id="Reason" class="form-control" placeholder="Reason" [(ngModel)]="model.Name" name="Reason">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="Description">Description</label>
+              <div class="col-md-9">
+                <input type="text" id="Description" class="form-control" placeholder="Description" [(ngModel)]="model.Description" name="Description">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="Value">Value</label>
+              <div class="col-md-9">
+                <input type="number" id="Value" class="form-control" placeholder="Value" [(ngModel)]="model.Value" name="Value">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="Timestamp">Date</label>
+              <div class="col-md-9">
+                <input type="text" id="Timestamp" 
+                class="form-control" 
+                placeholder="Datepicker" 
+                [(ngModel)]="date" 
+                name="Timestamp" bsDatepicker 
+                [bsValue]="bsValue"
+                [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }">        
+              </div>
+            </div>
+            <button type="submit" class="btn btn-sm btn-primary" [disabled]="disabled">
+              <i class="fa fa-dot-circle-o"></i> Submit</button>
+            <button type="button" class="btn btn-sm btn-warning" (click)="newAdjustment()">
+              <i class="fa fa-dot-circle-o"></i> Reset</button>
+          </form>
+        </div>
+        <div class="card-footer">
+          <div *ngFor="let alert of alerts">
+              <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="col"></div>
+  </div>
+</div>

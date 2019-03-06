@@ -1,0 +1,58 @@
+<div class="row align-items-center">
+    <div class="col"></div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          <i class="icon-drop"></i> Raids
+        </div>
+        <div class="card-body">
+            <a routerLink="/raids/insert" *ngIf="isAdmin"><i class="icon-plus"></i> Add Raid</a>
+          <ngx-datatable class="bootstrap" [rows]="fRaids" [headerHeight]="30" [footerHeight]="30" [limit]="15"
+            [columnMode]="'force'" [rowHeight]="'auto'">
+            <ngx-datatable-column name="Name" [sortable]="true" prop="Name">
+              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                  <a routerLink="/raids/{{row.IdRaid}}">{{row.Name}}</a>
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Pool"  [sortable]="true" prop="Pool.Name">
+              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{row.Pool.Name}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Date"  [sortable]="true" prop="Timestamp">
+              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{row.Timestamp | date:'MM/dd/yyyy'}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Items"  [sortable]="true" prop="ItemCount">
+              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{row.ItemCount}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Total Ticks"  [sortable]="true" prop="TotalTicks">
+              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{row.TotalTicks}}
+              </ng-template>
+            </ngx-datatable-column>              
+            <ngx-datatable-column name="DKP Earned"  [sortable]="true" prop="DKPValue">
+              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{row.DKPValue}}
+              </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="DKP Spent"  [sortable]="true" prop="DKPSpent">
+              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                {{row.DKPSpent}}
+              </ng-template>
+            </ngx-datatable-column>                                        
+            <ngx-datatable-column name="Actions"  [sortable]="false" prop="Name" *ngIf="isAdmin">
+              <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                  <button type="button" class="btn btn-sm btn-primary" (click)="navToRaid(row)"><i class="fa fa-dot-circle-o"></i> Select</button>
+                  <button type="button" class="btn btn-sm btn-warning" (click)="navToRaidEdit(row)"><i class="fa fa-dot-circle-o"></i> Edit</button>  
+              </ng-template>
+            </ngx-datatable-column>
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+    <div class="col"></div>
+  </div>

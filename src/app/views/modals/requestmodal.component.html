@@ -1,0 +1,138 @@
+<div class="modal-header">
+    <h4 class="modal-title">Request Details</h4>
+    <button type="button" class="close" (click)="bsModalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="card" *ngIf="inputModel.RequestType==1">
+        <div class="card-header">
+            <div class="float-left">
+                <strong>{{inputModel.Requestor}} would like to claim: </strong>
+            </div>
+        </div>
+        <div class="card-body">
+            <form #characterForm="ngForm">
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Name">Character</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="Name" class="form-control" placeholder="Text" [(ngModel)]="CharacterModel.Name" name="Name">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Rank">Rank</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="Rank" class="form-control" placeholder="Text" [(ngModel)]="CharacterModel.Rank" name="Rank">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+    <div class="card" *ngIf="inputModel.RequestType==3">
+        <div class="card-header">
+            <div class="float-left">
+                <strong>Raid Tick Request</strong>
+            </div>
+        </div>
+        <div class="card-body">
+            <form #characterForm="ngForm">
+            
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Character">Character</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="Character" class="form-control" placeholder="Text" [(ngModel)]="RaidTickModel.Character" name="Character">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Raid">Raid</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="Raid" class="form-control" placeholder="Text" [(ngModel)]="RaidTickModel.Raid" name="Raid">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Timestamp">Timestamp</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="Timestamp" class="form-control" placeholder="Text" [(ngModel)]="RaidTickModel.Timestamp" name="Timestamp">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Tick">Tick</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="Tick" class="form-control" placeholder="Text" [(ngModel)]="RaidTickModel.Tick" name="Tick">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="DkpValue">DKP Value</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="DkpValue" class="form-control" placeholder="Text" [(ngModel)]="RaidTickModel.DkpValue" name="DkpValue">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Reason">Reason</label>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <textarea [(ngModel)]="RequestDetails.reason" readonly id="textarea-input" name="textarea-input" rows="9" class="form-control" placeholder="Log or Reason here"></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <div class="float-left">
+                <strong>Request Information</strong>
+            </div>
+        </div>
+        <div class="card-body">
+            <form #requestForm="ngForm">
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Requestor">Requestor</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="Requestor" class="form-control" placeholder="Text" [(ngModel)]="inputModel.Requestor" name="Requestor">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="RequestType">Type</label>
+                    <div class="col-md-9">
+                        <label class="form-control" for="Approver">{{RequestType[inputModel.RequestType]}}</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="RequestStatus">Status</label>
+                    <div class="col-md-9">
+                        <label class="form-control" for="Approver">{{RequestStatus[inputModel.RequestStatus]}}</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="RequestTimestamp">Request Date</label>
+                    <div class="col-md-9">
+                        <label class="form-control" for="Approver">{{inputModel.RequestTimestamp | date:'MM/dd/yyyy'}}</label>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Approver">Approver</label>
+                    <div class="col-md-9">
+                        <input type="text" readonly id="RequestApprover" class="form-control" placeholder="Text" [(ngModel)]="inputModel.RequestApprover" name="RequestApprover">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="Approver">Review Date</label>
+                    <div class="col-md-9">
+                        <label class="form-control" for="Approver">{{inputModel.ReviewedTimestamp | date:'MM/dd/yyyy'}}</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Ok</button>
+</div>

@@ -1,0 +1,82 @@
+<div class="card">
+  <div class="card-body">
+    <!-- Raid Tick Meta Data Row -->
+    <div class="row">
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Tick Name</span>
+          </div>
+          <input type="text" id="tickname" [(ngModel)]="tickModel.Description" name="tickname" class="form-control">
+          <div class="input-group-append">
+            <span class="input-group-text"><i class="fa fa-comment"></i></span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">DKP Value</span>
+          </div>
+          <input type="text" id="dkpvalue" [(ngModel)]="tickModel.Value" name="dkpvalue" class="form-control">
+          <div class="input-group-append">
+            <span class="input-group-text"><i class="fa fa-btc"></i></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Attendees Header Row-->
+    <div class="row">
+      <div>
+        <h3>Attendees</h3>
+        <div *ngIf="tickModel?.Attendees?.size > 0">
+          <p>Click individual names to remove them from the raid tick</p>
+        </div>
+        <div *ngIf="!(tickModel?.Attendees?.size > 0)">
+          <alert type="warning">Your raid tick has no attendees! Add some below</alert>          
+        </div>
+      </div>
+    </div>
+    <!-- List All Attendees as Buttons row -->
+    <div class="row">
+      <div *ngFor="let vPlayer of tickModel.Attendees">
+        <button (click)="removeAttendee(vPlayer)" style="width:75px; margin-right: 10px; margin-top:10px;" type="button"
+          class="btn btn-sm btn-primary">{{vPlayer}}</button>
+      </div>
+    </div>
+    <!-- Add Character Manually Row -->
+    <div class="row">
+      <form style="margin-top: 25px">
+        <div class="form-group row">
+          <div class="col-md-12">
+            <h3>Add Attendees Manually</h3>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Character</span>
+              </div>
+              <input [(ngModel)]="singleAttendee"  (keyup.enter)="addSingleAttendee()"  type="attendeename" id="attendeename" name="attendeename" class="form-control"
+                placeholder="Character Name">
+              <span class="input-group-append">
+                <button type="button" class="btn btn-primary"(click)="addSingleAttendee()">Add</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- Bulk Upload Row -->
+    <div class="row">
+      <div>
+        <h3>Bulk Upload</h3>
+        <p>Paste the raid dump or guild dump file in the text block below and click Add Attendees</p>
+        <textarea [(ngModel)]="dump" id="textarea-input" name="textarea-input" rows="9" class="form-control"
+          placeholder="Guild or Raid Dump"></textarea>
+        <div>
+          <button type="button" class="btn btn-primary" (click)="processDump()">Add Attendees</button>
+          <button type="button" class="btn btn-warning" (click)="clearDump()">Clear Dump</button>
+        </div>
+        <input  type='file' (change)="fileChanged($event)">
+      </div>
+    </div>
+  </div>
+</div>

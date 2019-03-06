@@ -1,0 +1,50 @@
+<div class="row">
+  <div class="col-md-6 mx-auto">
+    <div class="card mx-4">
+      <div class="card-body p-4">
+        <h1>Register</h1>
+        <p class="text-muted">Create your account</p>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="icon-user"></i></span>
+          </div>
+          <input [(ngModel)]="username" type="text" class="form-control" placeholder="Username">
+        </div>
+        <span class="help-block">* Username can be anything you prefer</span>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="icon-user"></i></span>
+          </div>
+          <input [(ngModel)]="nickname" type="text" class="form-control" placeholder="Nickname">
+        </div>
+        <span class="help-block">* Nickname should match your forum name or main character</span>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">@</span>
+          </div>
+          <input [(ngModel)]="email" type="text" class="form-control" placeholder="Email">
+        </div>
+        <span class="help-block">* Email verification will be required</span>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text"><i class="icon-lock"></i></span>
+          </div>
+          <input [(ngModel)]="password" type="password" class="form-control" placeholder="Password">
+        </div>
+        <span class="help-block">* Password must contain at least 8 characters, 1 Upper case, 1 Lower Case and 1 Special
+            Characte</span>
+        <button type="button" class="btn btn-block btn-success" (click)="register()">Create Account</button>
+      </div>
+      <div class="card-footer">
+        <div *ngFor="let alert of alerts">
+          <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+        </div>
+        <div class="row">
+          <a class="nav-link" [routerLink]="['/verify']">Verify Email</a>
+          <a class="nav-link" [routerLink]="['/login']">Login</a>
+          <a class="nav-link" [routerLink]="['/forgot']">Forgot Password</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

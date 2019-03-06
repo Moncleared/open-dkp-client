@@ -1,0 +1,21 @@
+<div class="card">
+    <div class="card-header" [ngStyle]="inputModel.style">
+        {{inputModel.class}}
+    </div>
+    <div class="card-body">
+        <table class="table table-sm" style="color: #0a5;">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="text-left">DKP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vModel of inputModel.top">
+                    <td><a routerLink="/characters/{{vModel.CharacterName}}">{{vModel.CharacterName}}</a></td>
+                    <td class="text-left">{{vModel.CurrentDKP | number:'1.0-0'}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

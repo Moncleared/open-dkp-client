@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <strong>Instructions</strong>
+            </div>
+            <div class="card-body">
+                <p>In order to review and request credit for raid ticks you must have the character associated with your profile. Follow these steps to do that</p>
+                <ul>
+                    <li><a [routerLink]="['/register']">Register an Account</a></li>
+                    <li><a [routerLink]="['/login']">Login to your account</a></li>
+                    <li>Select your <a [routerLink]="['/characters']">Character</a> and go to the details page. The top left will have a "Claim Character" button</li>
+                    <li>Once your request to claim your character has been approved by an administrator, your character will show up in the table below</li>
+                    <li>That's it! Use the table below to see your characters and review their raid ticks!</li>
+                </ul>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <strong>Characters</strong>
+            </div>
+            <div class="card-body">
+                <ngx-datatable class="bootstrap" [rows]="CharacterList" [headerHeight]="30" [footerHeight]="30" [limit]="5" [columnMode]="'force'" [rowHeight]="'auto'">
+                    <ngx-datatable-column name="" [sortable]="false" prop="None">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <button type="button" class="btn btn-sm btn-primary" routerLink="/raids/ticks/{{row.Name}}"><i class="fa fa-dot-circle-o"></i>
+                                Select</button>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Name" [sortable]="true" prop="Name">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            <a routerLink="/characters/{{row.Name}}">{{row.Name}}</a>
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Rank" [sortable]="true" prop="Rank">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Rank}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Class" [sortable]="true" prop="Class">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Class}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                    <ngx-datatable-column name="Level" [sortable]="true" prop="Level">
+                        <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                            {{row.Level}}
+                        </ng-template>
+                    </ngx-datatable-column>
+                </ngx-datatable>
+            </div>
+        </div>
+    </div>
+</div>

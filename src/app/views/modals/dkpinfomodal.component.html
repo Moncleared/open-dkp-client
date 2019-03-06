@@ -1,0 +1,43 @@
+<div class="modal-header">
+    <h4 class="modal-title">DKP Information</h4>
+    <button type="button" class="close" (click)="bsModalRef.hide()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Base Raid Value (BRV)</td>
+                <td>{{inputModel.BRV}}</td>
+            </tr>
+            <tr>
+                <td>Minimum Bid</td>
+                <td>{{inputModel.MinBid}}</td>
+            </tr>
+            <tr>
+                <td>Minimum Bid Increase</td>
+                <td>{{inputModel.MinBidInc}}</td>
+            </tr>
+            <tr>
+                <td>Maximum Main DKP Cap</td>
+                <td>{{inputModel.DKPCap}}</td>
+            </tr>
+            <tr>
+                <td>Max Bid (Main/PALT)</td>
+                <td>{{inputModel.MaxBidMain}}</td>
+            </tr>
+            <tr>
+                <td>Max Bid (ALT)</td>
+                <td>{{inputModel.MaxBidAlt}}</td>
+            </tr>            
+            <tr>
+                <td>Below 40% RA Max Bid</td>
+                <td>{{inputModel.MaxBidRA}}</td>
+            </tr>          
+        </tbody>
+    </table>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="bsModalRef.hide()">Ok</button>
+</div>

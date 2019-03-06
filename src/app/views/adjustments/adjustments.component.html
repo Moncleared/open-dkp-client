@@ -1,0 +1,86 @@
+<div class="animated fadeIn">
+    <div class="row align-items-center">
+        <div class="col"></div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <i class="icon-drop"></i> Adjustments
+                </div>
+                <div class="card-body">
+                    <div class="clearfix">
+                        <div class="float-left">
+                            <a routerLink="/adjustments/insert" *ngIf="isAdmin"><i class="icon-plus"></i> Add Adjustment</a>
+                        </div>
+                        <div class="float-right">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Filter</span>
+                                </div>
+                                <input (keyup)="onKey($event)" [(ngModel)]="filterBy" placeholder="filter text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngFor="let alert of alerts">
+                        <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                    </div>
+                    <ngx-datatable class="bootstrap" [rows]="AdjustmentList" [headerHeight]="30" [footerHeight]="30" [limit]="15" [columnMode]="'force'" [rowHeight]="'auto'">
+                        <ngx-datatable-column name="Character" [sortable]="true" prop="Character">
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                <a routerLink="/characters/{{row.Character}}">{{row.Character}}</a>
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Name" [sortable]="true" prop="Name">
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                {{row.Name}}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Description" [sortable]="true" prop="Description">
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                {{row.Description}}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Value" [sortable]="true" prop="Value">
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                {{row.Value}}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Date" [sortable]="true" prop="Timestamp">
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                {{row.Timestamp | date:'MM/dd/yyyy'}}
+                            </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Actions" [sortable]="false" prop="Name" *ngIf="isAdmin">
+                            <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
+                                <button type="button" class="btn btn-sm btn-warning" (click)="navToEdit(row)">
+                                    Edit</button>
+                                <button type="button" class="btn btn-sm btn-danger" (click)="getModelIdAndShow(row)">
+                                    Delete</button>
+                            </ng-template>
+                        </ngx-datatable-column>
+                    </ngx-datatable>
+                </div>
+            </div>
+        </div>
+
+        <div class="col"></div>
+        <div bsModal #smallModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-danger" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Are you sure?</h4>
+                        <button type="button" class="close" (click)="smallModal.hide()" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this adjustment?&hellip;</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="smallModal.hide()">Cancel</button>
+                        <button type="button" class="btn btn-danger" (click)="deleteAdjustment()">Delete</button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+</div>

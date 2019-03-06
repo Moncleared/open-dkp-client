@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-8">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        {{item.name}}
+                    </div>
+                    <div class="card-body">
+                        <span class="eq-tooltip-icon" style="display:inline-block; vertical-align:top; margin-right:4px;">
+                            <div style="background-image:url(//www.magelocdn.com/images/eq/item_icones/item_2745.png?v=15182);"></div>
+                        </span>
+                        <div class="m-tooltip css2 ">
+                            <div class="arrow"></div>
+                            <div class="border-1" style="max-width: 335px;"></div>
+                            <div class="border-2" style="right: auto;margin-left: 335px;"></div>
+                            <div class="corner" style="right: auto;margin-left: 335px;"></div>
+                            <div class="body" [innerHTML]="item.tooltip">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card" style="height: calc(100% - 25px);">
+            <div class="card-header">
+                Chat
+            </div>
+            <div class="card-body">
+                <textarea style="height: 90%" #scrollMe readonly [(ngModel)]="chatBox" id="textarea-input" name="textarea-input" rows="9" class="form-control"></textarea>
+                <div class="form-group row">
+                    <div class="col-md-12">
+                        <div class="input-group">
+                            <input (keyup.enter)="sendMessage()" [(ngModel)]="userInput" type="text" id="input2-group2" name="input2-group2" class="form-control" placeholder="Enter Message Here">
+                            <span class="input-group-append">
+                                <button type="button" (click)="sendMessage()" [disabled]="disabled" class="btn btn-primary">Send</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

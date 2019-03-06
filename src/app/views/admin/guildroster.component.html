@@ -1,0 +1,32 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Guild Roster Tool</strong>
+                </div>
+                <div class="card-body">
+                    <p>This tool will allow you to synchronize the data in the database with a guild dump. Please excerise extreme caution when using this tool as
+                        it WILL perform mass updates to the database with no immediate way to restore the data. Only character data such as Level, Class, Race, Rank
+                        will be updated by this operation. This will NOT create new characters nor delete characters.
+                    </p>
+                    <div>
+                        <h3>Guild Roster</h3>
+                        <p>Paste the guild dump file in the text block below OR use the Choose File button below to select the file</p>
+                        <textarea [(ngModel)]="dump" id="textarea-input" name="textarea-input" rows="12" class="form-control" placeholder="Guild Dump"></textarea>
+                        <div>
+                            <button type="button" [disabled]="disabled" class="btn btn-primary" (click)="syncRoster()">Sync Roster</button>
+                            <button type="button" [disabled]="disabled" class="btn btn-warning" (click)="clearDump()">Clear Dump</button>
+                        </div>
+                        <input type='file' (change)="fileChanged($event)">
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div *ngFor="let alert of alerts">
+                        <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

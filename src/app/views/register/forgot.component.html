@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card mx-4">
+            <div class="card-body p-4">
+                <h1>Forgot Password</h1>
+                <p class="text-muted">Use this to reset your forgotton password</p>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Username</span>
+                        </div>
+                        <input #input name="username" type="text" class="form-control" placeholder="Username" [(ngModel)]="username">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                        </div>
+                    </div>
+                    <span class="help-block">*Username is case sensitive!</span>
+                </div>
+
+                <div class="form-group" *ngIf="STATE===false">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Verification Code</span>
+                        </div>
+                        <input #input name="code" type="text" class="form-control" placeholder="Verification Code" [(ngModel)]="code">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-user"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" *ngIf="STATE===false">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">New Password</span>
+                        </div>
+                        <input name="password" type="password" class="form-control" placeholder="Password" [(ngModel)]="newPassword">
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-asterisk"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-block btn-success" (click)="resetSubmit()">Reset Password</button>
+                <button type="button" class="btn btn-block btn-success" (click)="verifyCode(true)" *ngIf="STATE===true">I already have my verification code</button>
+                <button type="button" class="btn btn-block btn-warning" (click)="verifyCode(false)" *ngIf="STATE===false">I need a new verification code</button>
+            </div>
+            <div class="card-footer">
+                <div *ngFor="let alert of alerts">
+                    <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                </div>
+                <div class="row">
+                    <a class="nav-link" [routerLink]="['/login']">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

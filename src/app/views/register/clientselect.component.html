@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card mx-4">
+            <div class="card-body p-4">
+                <h1>Select a Client</h1>
+                <p class="text-muted">Welcome to OpenDKP! Please select a client from the list below to be redirected to the appropriate landing page.</p>
+                <p class="text-muted">You can always visit your client site direcly by using it's subdomain such as: demo.opendkp.com</p>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Clients</span>
+                        </div>
+                        <select [compareWith]="compareFn" class="form-control" id="clientId" name="clientName" [(ngModel)]="clientModel" required>
+                            <option *ngFor="let client of clients" [ngValue]="client">{{client.Name}}</option>
+                        </select>
+                        <div class="input-group-append">
+                            <span class="input-group-text"><i class="fa fa-bus"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-block btn-success" (click)="redirectToClient()">Go!</button>
+            </div>
+            <div class="card-footer">
+                <div class="row">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,84 @@
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Update Character</strong>
+                </div>
+                <div class="card-body">
+                    <form #characterForm="ngForm" (ngSubmit)="onSubmit()">
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="Name">Name</label>
+                            <div class="col-md-9">
+                                <input type="text" id="Name" class="form-control" placeholder="Text" [(ngModel)]="model.Name" name="Name">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="Name">Active?</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="Active" name="Active" [(ngModel)]="model.Active" required>
+                                    <option [value]="1">Active</option>
+                                    <option [value]="0">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="Rank">Rank</label>
+                            <div class="col-md-9">
+                                <input type="text" id="Rank" class="form-control" placeholder="Text" [(ngModel)]="model.Rank" name="Rank">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="Level">Level</label>
+                            <div class="col-md-9">
+                                <input type="text" id="Level" name="Level" class="form-control" placeholder="75" [(ngModel)]="model.Level">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="Class">Class</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="Class" name="Class" [(ngModel)]="model.Class" required>
+                                    <option *ngFor="let class of classes" [value]="class">{{class}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="Race">Race</label>
+                            <div class="col-md-9">
+                                <select class="form-control" id="Race" name="Race" [(ngModel)]="model.Race" required>
+                                    <option *ngFor="let race of races" [value]="race">{{race}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label">Gender</label>
+                            <div class="col-md-9 col-form-label">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radios" [(ngModel)]="model.Gender" id="Gender" value="Male" checked>
+                                    <label class="form-check-label" for="Gender">Male</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="radios" [(ngModel)]="model.Gender" id="Gender" value="Female">
+                                    <label class="form-check-label" for="radio2">Female</label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-primary" [disabled]="disabled">
+                            <i class="fa fa-dot-circle-o"></i> Submit</button>
+                        <button type="button" class="btn btn-sm btn-warning" [disabled]="disabled" (click)="navToChar()">
+                            <i class="fa fa-dot-circle-o"></i> Cancel</button>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <div *ngFor="let alert of alerts">
+                        <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
