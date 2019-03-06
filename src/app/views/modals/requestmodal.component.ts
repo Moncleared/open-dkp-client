@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import * as _ from "lodash";
 import { UserRequest, RequestType, RequestStatus } from '../../models/UserRequest';
 import { CharacterModel } from '../../models/CharacterModel';

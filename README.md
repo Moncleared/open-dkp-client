@@ -1,11 +1,11 @@
-# OpenDKP - AWS Lambdas
+# OpenDKP - AWS AngularJS client
 
 OpenDKP was developed over the course of several months as a passion project of mine. My primary goal was exposure to Amazon Web Services, as many components as I could. It started off as a simple AngularJS ap hosted in an [S3](https://aws.amazon.com/s3/) bucket, then grew to becoming a full fledged application with middle tier and backend provided by [API Gateway](https://aws.amazon.com/api-gateway/) and [Lambdas](https://aws.amazon.com/lambda/). 
 
 I've always been a huge fan of .NET and this was also a great opportunity to work with [.NET Core](https://docs.microsoft.com/en-us/dotnet/core/) within the AWS environment.
 
 ## Disclaimer
-Please do not leverage the source code you find in this repository as a standard or best practice. This was primarily a learning experience for integration into AWS and the overall design is piece meal over a long period of time. Given the opportunity to rebuild, as many engineers would say, I'd do things totally different!
+Please do not leverage the source code you find in this repository as a standard or best practice. This was primarily a learning experience for integration into AWS and the overall design is piecemeal over a long period of time. Given the opportunity to rebuild, as many engineers would say, I'd do things totally different!
 
 Much refactoring is needed and any contributions are much appreciated
 

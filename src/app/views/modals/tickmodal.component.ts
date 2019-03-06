@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { TickModel } from '../../models/TickModel';
-import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import * as _ from "lodash";
 
 @Component({
