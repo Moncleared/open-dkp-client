@@ -34,6 +34,33 @@ $ npm start
 # Build the application for prod
 $ npm run build
 ```
+
+## Running the client locally
+After you've cloned the repo and executed npm install successfully, you can:
+``` bash
+# Run the application locally
+$ npm start
+```
+Once the application is up and running, you should be able to navigate to localhost:4200 which will redirect you to a 'client selection' page.
+Even though you are setting up your own instance and running locally, the client is still designed to look for a subdomain before loading. 
+
+If you reach 'Select a Client' page you know the application has started and is running successfully. If you do not have any clients listed in the drop down that means a couple of things:
+* You have not setup your API Gateway/Lambdas and RDS instance yet. The client is AngularJS and requires the backend to be up and running to work
+	* You could mock out requests if you choose, but I have not taken the time to implement this
+	* You could look at disabling the subdomain checks/validation by simply following the client.service.ts logic around the application to see where it is implemented. There are not too many places
+	* Preferred method is to simply setup the backend and ensure you have a client defined in your clients table
+
+## FAQ
+* Why do I have to select a client if I am setting this up specifically for my guild?
+	* In order to avoid trying to maintain two completely different projects/repositories, we're following the multi-tenancy design, you can simply define one client instead of multiple
+
+* Why is the coloring on my site different than the demo version?
+	* We're leveraging [CoreUI](https://coreui.io) for the front end UI framework. The color scheme is different and you can make your own or purchase a dark theme from CoreUI
+
+* Do users have to create accounts?
+	* No, the do not. They will be able to review DKP information but not perform any special operations such as requesting raid attendance or editing/associating characters.
+	* Creating an account is easy though, it's all built into the UI and handled by AWS Cognito on the backend
+
 ## Documentation
 Documentation will be developed and provided over time.
 
