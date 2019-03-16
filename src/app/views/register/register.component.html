@@ -34,6 +34,7 @@
         <span class="help-block">* Password must contain at least 8 characters, 1 Upper case, 1 Lower Case and 1 Special
             Characte</span>
         <button type="button" class="btn btn-block btn-success" (click)="register()">Create Account</button>
+        <button type="button" class="btn btn-block btn-warning" (click)="resendCode()">Send new Verification Code</button>
       </div>
       <div class="card-footer">
         <div *ngFor="let alert of alerts">

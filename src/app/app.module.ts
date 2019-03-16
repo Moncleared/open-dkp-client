@@ -62,6 +62,7 @@ import { CognitoUtil } from './services/cognito.service';
 import { ClientResolve } from './resolves/client.resolve';
 import { RootLayoutComponent } from './containers/default-layout/root-layout.component';
 import { ClientSelectComponent } from './views/register/clientselect.component';
+import { DemoModalComponent } from './views/modals/demomodal.component';
 
 @NgModule({
     imports: [
@@ -97,12 +98,14 @@ import { ClientSelectComponent } from './views/register/clientselect.component';
         ForgotComponent,
         ProfileComponent,
         DkpInfoModalComponent,
+        DemoModalComponent,
         RequestModalComponent,
         ClientSelectComponent,
         BaseComponent
     ],
     entryComponents: [
         DkpInfoModalComponent,
+        DemoModalComponent,
         RequestModalComponent
     ],
     providers: [{

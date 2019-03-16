@@ -15,6 +15,7 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 // Theme Routing
 import { CharactersRoutingModule } from './characters-routing.module';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
     imports: [
@@ -23,6 +24,7 @@ import { CharactersRoutingModule } from './characters-routing.module';
         AlertModule.forRoot(),
         ModalModule.forRoot(),
         TabsModule.forRoot(),
+        BsDatepickerModule.forRoot(),
         NgxDatatableModule,
         CharactersRoutingModule
     ],

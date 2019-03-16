@@ -42,7 +42,7 @@ export class CognitoComponent extends BaseComponent implements OnInit {
             this.Users = _.cloneDeep(vTmpUsers);
         }).catch(error => {
             this.loadingService.setLoadingStatus(false);
-            this.pushAlert(error, 'danger');
+            this.pushAlert(`${error.response.data.ErrorMessage}`, 'danger');
             console.log(error);
         })
     }
@@ -53,7 +53,7 @@ export class CognitoComponent extends BaseComponent implements OnInit {
             this.ngOnInit();
         }).catch(error => {
             this.loadingService.setLoadingStatus(false);
-            this.pushAlert(error, 'danger');
+            this.pushAlert(`${error.response.data.ErrorMessage}`, 'danger');
             console.log(error);
         });
     }
@@ -64,7 +64,7 @@ export class CognitoComponent extends BaseComponent implements OnInit {
             this.ngOnInit();
         }).catch(error => {
             this.loadingService.setLoadingStatus(false);
-            this.pushAlert(error, 'danger');
+            this.pushAlert(`${error.response.data.ErrorMessage}`, 'danger');
             console.log(error);
         });
     }

@@ -18,8 +18,8 @@ export class VerifyComponent extends BaseComponent {
         });
     }
 
-    public username: string;
-    public code: string;
+    public username: string = '';
+    public code: string = '';
 
 
     public register() {
@@ -45,4 +45,18 @@ export class VerifyComponent extends BaseComponent {
                 this.pushAlert(err.message, 'danger');
             });
     }
+
+    public resendCode() {
+        if (this.username.length <= 0 ) {
+            this.pushAlert('To resend verification code, enter your Username', 'danger');
+            return;
+        }
+
+        this.cognitoService.resendCode(this.username).then(result => {
+            this.pushAlert('Resent Verification code!', 'sucecss');
+        }).catch(error => {
+            this.pushAlert(error, 'danger');
+        });     
+    }
+
 }

@@ -42,10 +42,12 @@ export class AdminComponent extends BaseComponent implements OnInit {
     }
 
     fetchRequests() {
+        this.loadingService.setLoadingStatus(true);
         this.PendingRequestList = [];
         this.ApprovedRequestList = [];
         this.DeniedRequestList = [];    
         this.dkpService.getAllRequests().then(result => {
+            this.loadingService.setLoadingStatus(false);
             this.PendingRequestList = _.filter(result, x => x.RequestStatus == RequestStatus.PENDING);
             this.PendingRequestList = _.orderBy(this.PendingRequestList, x => { return x.RequestTimestamp; }, ['desc', 'asc']);
             
@@ -55,23 +57,26 @@ export class AdminComponent extends BaseComponent implements OnInit {
             this.DeniedRequestList = _.filter(result, x => x.RequestStatus == RequestStatus.DENIED);
             this.DeniedRequestList = _.orderBy(this.DeniedRequestList, x => { return x.RequestTimestamp; }, ['desc', 'asc']); 
         }).catch(error => {
-            //TODO: Handle error better
+            this.loadingService.setLoadingStatus(false);
             console.log(error);
         });        
     }
 
     updateDkpInfo() {
+        this.loadingService.setLoadingStatus(true);
         var vSettingModel = new SettingsModel();
         vSettingModel.SettingName = "dkp_info";
         vSettingModel.SettingValue = JSON.stringify(this.dkpModel);
         vSettingModel.UpdatedBy = this.currentUser["cognito:username"];
         vSettingModel.UpdatedTimestamp = new Date();
         this.dkpService.putSetting(vSettingModel).then(result => {
+            this.loadingService.setLoadingStatus(false);
             this.alerts.push({
                 type: 'success',
                 msg: `Saved successfully`
             });
         }).catch(error => {
+            this.loadingService.setLoadingStatus(false);
             this.alerts.push({
                 type: 'danger',
                 msg: `${error}`
@@ -96,13 +101,16 @@ export class AdminComponent extends BaseComponent implements OnInit {
      */    
     approveRequest(pRequest: UserRequest) {
         pRequest.RequestStatus = RequestStatus.APPROVED;
+        this.loadingService.setLoadingStatus(true);
         this.dkpService.updateRequest(pRequest).then(result => {
+            this.loadingService.setLoadingStatus(false);
             this.fetchRequests();
             this.alerts.push({
                 type: 'success',
                 msg: `Request APPROVED successfully!`
             });            
         }).catch(error => {
+            this.loadingService.setLoadingStatus(false);
             this.fetchRequests();
             this.alerts.push({
                 type: 'danger',
@@ -117,7 +125,9 @@ export class AdminComponent extends BaseComponent implements OnInit {
      */
     denyRequest(pRequest) {
         pRequest.RequestStatus = RequestStatus.DENIED;
+        this.loadingService.setLoadingStatus(true);
         this.dkpService.updateRequest(pRequest).then(result => {
+            this.loadingService.setLoadingStatus(false);
             this.fetchRequests();
             pRequest = result;
             this.alerts.push({
@@ -125,6 +135,7 @@ export class AdminComponent extends BaseComponent implements OnInit {
                 msg: `Request DENIED successfully!`
             });               
         }).catch(error => {
+            this.loadingService.setLoadingStatus(false);
             this.fetchRequests();
             this.alerts.push({
                 type: 'danger',

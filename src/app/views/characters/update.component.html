@@ -66,6 +66,17 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-md-3 col-form-label" for="Timestamp">Main Change Effective</label>
+                            <div class="col-md-9">
+                              <input type="text" id="Timestamp" 
+                              class="form-control" 
+                              placeholder="Datepicker" 
+                              [(ngModel)]="model.MainChange" 
+                              name="Timestamp" bsDatepicker
+                              [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }">        
+                            </div>
+                          </div>                        
                         <button type="submit" class="btn btn-sm btn-primary" [disabled]="disabled">
                             <i class="fa fa-dot-circle-o"></i> Submit</button>
                         <button type="button" class="btn btn-sm btn-warning" [disabled]="disabled" (click)="navToChar()">

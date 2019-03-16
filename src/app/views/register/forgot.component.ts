@@ -29,7 +29,7 @@ export class ForgotComponent extends BaseComponent {
             }).catch(error => {
                 this.loadingService.setLoadingStatus(false);
                 console.log(error);
-                this.pushAlert("There was an error trying to reset your password", 'danger');
+                this.pushAlert(error.message, 'danger');
             });          
         } else if ( this.username.length > 0 ) {
             this.loadingService.setLoadingStatus(true);
@@ -40,7 +40,7 @@ export class ForgotComponent extends BaseComponent {
             }).catch(error => {
                 this.loadingService.setLoadingStatus(false);
                 console.log(error);
-                this.pushAlert("There was an error trying to reset your password", 'danger');
+                this.pushAlert(error.message, 'danger');
             });
         }
     }

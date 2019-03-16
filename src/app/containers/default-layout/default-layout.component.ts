@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import * as _ from "lodash";
 import { ClientService } from '../../services/client.service';
 import { ClientModel } from '../../models/ClientModel';
+import { DemoModalComponent } from '../../views/modals/demomodal.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -44,6 +45,7 @@ export class DefaultLayoutComponent extends BaseComponent implements OnInit {
         super(cognitoService, loadingService, router);
         this.clientDetails = this.clientService.clientDetails;
         if (this.clientDetails.Subdomain === 'ogc') this.clientLogo = { src: 'assets/img/brand/logo.png', width: 120, height: 45, alt: 'OGC' };
+        if (this.clientDetails.Subdomain === 'demo') this.showDemoModal();
 
         this.changes = new MutationObserver((mutations) => {
             this.sidebarMinimized = document.body.classList.contains('sidebar-minimized')
@@ -74,6 +76,10 @@ export class DefaultLayoutComponent extends BaseComponent implements OnInit {
 
         this.bsModalRef = this.modalService.show(DkpInfoModalComponent, { initialState, class: 'modal-dialog modal-primary' });
     }
+
+    showDemoModal() {
+        this.bsModalRef = this.modalService.show(DemoModalComponent, { class: 'modal-dialog modal-primary' });
+    }    
 
     ngOnInit(): void {
         this.loadingService.getIsLoading().pipe(delay(10)).subscribe(x => this.isLoading = x);

@@ -17,6 +17,7 @@
           <input [(ngModel)]="code" type="text" class="form-control" placeholder="Verification Code">
         </div>
         <button type="button" class="btn btn-block btn-success" (click)="register()">Verify Email</button>
+        <button type="button" class="btn btn-block btn-warning" (click)="resendCode()">Send new Verification Code</button>
       </div>
       <div class="card-footer">
         <div *ngFor="let alert of alerts">

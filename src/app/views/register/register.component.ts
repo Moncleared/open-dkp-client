@@ -16,10 +16,10 @@ export class RegisterComponent extends BaseComponent {
         super(cognitoService, loadingService, router);
     }
 
-    public username: string;
-    public password: string;
-    public email: string;
-    public nickname: string;
+    public username: string = '';
+    public password: string = '';
+    public email: string = '';
+    public nickname: string = '';
 
     public register() {
         this.alerts = [];
@@ -42,6 +42,20 @@ export class RegisterComponent extends BaseComponent {
                 this.pushAlert(err.message, 'danger');
             })
     }
+
+    public resendCode() {
+        if (this.username.length <= 0 ) {
+            this.pushAlert('To resend verification code, enter your Username', 'danger');
+            return;
+        }
+
+        this.cognitoService.resendCode(this.username).then(result => {
+            this.pushAlert('Resent Verification code!', 'sucecss');
+        }).catch(error => {
+            this.pushAlert(error, 'danger');
+        });     
+    }
+    
     pushAlert(message, type) {
         this.alerts.push({
             type: type,

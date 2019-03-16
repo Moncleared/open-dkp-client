@@ -59,6 +59,7 @@ export class UpdateCharacterComponent extends BaseComponent implements OnInit {
         var charName = this.route.snapshot.paramMap.get("name");
         this.dkpService.getCharacter(charName).then(character => {
             this.model = character;
+            this.model.MainChange = new Date(this.model.MainChange).toLocaleDateString();            
         }).catch(error => {
             this.alerts.push({
                 type: 'danger',

@@ -7,5 +7,5 @@ export class TickModel {
     public Description: string;
     public Value: number;
     public Attendees: Set < string >;
-    public IdTick: number;
+    public TickId: number;
 }

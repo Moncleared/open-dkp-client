@@ -108,8 +108,8 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
             this.raidModel = new RaidModel();
             this.raidModel.Name = "";
             this.raidModel.Timestamp = new Date();
-            this.raidModel.Ticks = new Set < TickModel > ();
-            this.raidModel.Items = []; //new Set < ItemModel > ();
+            this.raidModel.Ticks = [];
+            this.raidModel.Items = [];
         }
 
         if (this.route.snapshot.params.id) {
@@ -134,10 +134,9 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
     }
 
     handleSpecialSerialization(raid) {
-        this.raidModel.Ticks = new Set < TickModel > (raid.Ticks);
         this.raidModel.Ticks.forEach(x => x.Attendees = new Set < string > (x.Attendees));
-        raid.Items = _.orderBy(raid.Items, x => { return x.CharacterName; });
-        //this.raidModel.Items = new Set < ItemModel > (raid.Items);
+        this.raidModel.Items = _.orderBy(raid.Items, x => { return x.CharacterName; });
+        this.FilteredItems = _.orderBy(raid.Items, x => { return x.CharacterName; });
         this.raidModel.Timestamp = new Date(raid.Timestamp);
     }
 
@@ -153,7 +152,7 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
             this.tickName = this.tickName.trim();
             var tick = new TickModel();
             tick.Description = this.tickName;
-            this.raidModel.Ticks.add(tick);
+            this.raidModel.Ticks.push(tick);
         }
     }
 
@@ -162,9 +161,8 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
      * collection to the selectedTick, maybe set to last or don't do at all?
      */
     removeRaidTick() {
-        if (this.selectedTick && this.raidModel.Ticks) this.raidModel.Ticks.delete(this.selectedTick);
-        if (this.raidModel.Ticks.size > 0) {
-            this.selectedTick = this.raidModel.Ticks.values().next().value;
+        if (this.selectedTick && this.raidModel.Ticks) {
+            this.raidModel.Ticks.splice(this.raidModel.Ticks.indexOf(this.selectedTick),1);
         }
     }
 
@@ -175,7 +173,8 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
         if (this.selectedTick) {
             let newTick = _.cloneDeep(this.selectedTick);
             newTick.Description = "COPY OF " + newTick.Description;
-            this.raidModel.Ticks.add(newTick);
+            newTick.TickId = null;
+            this.raidModel.Ticks.push(newTick);
             this.selectedTick = newTick;
         }
     }
@@ -195,19 +194,19 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
      * CLEAN THIS UP
      */
     generateTemplate() {
-        this.raidModel.Ticks.add(new TickModel("On-Time Tick 6:00PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 6:30PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 7:00PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 7:30PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 8:00PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 8:30PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 9:00PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 9:30PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 10:00PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 10:30PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 11:00PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 11:30PM CST"));
-        this.raidModel.Ticks.add(new TickModel("Tick 12:00AM CST"));
+        this.raidModel.Ticks.push(new TickModel("On-Time Tick 6:00PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 6:30PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 7:00PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 7:30PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 8:00PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 8:30PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 9:00PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 9:30PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 10:00PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 10:30PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 11:00PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 11:30PM CST"));
+        this.raidModel.Ticks.push(new TickModel("Tick 12:00AM CST"));
     }
 
     /**
@@ -254,12 +253,9 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
         //I edit the model before I send it over the wire because
         //something odd happens with Set serialization
         let model = _.cloneDeep(this.raidModel);
-        model.Ticks = Array.from(this.raidModel.Ticks);
         model.Ticks.forEach(x => {
             x.Attendees = Array.from(x.Attendees);
         });
-        model.Items = Array.from(this.raidModel.Items);
-
 
         //No Errors, lets process
         if (this.alerts.length <= 0) {
@@ -362,7 +358,6 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
             var vRemoveIndex = _.findIndex(this.raidModel.Items, (x:any) => {
                 return x.ItemID==pItemModel.ItemID && x.CharacterName==pItemModel.CharacterName;
             });
-            console.log(vRemoveIndex);
             if ( vRemoveIndex > -1 ) {
                 this.raidModel.Items.splice(vRemoveIndex,1);
                 this.filterBy = '';

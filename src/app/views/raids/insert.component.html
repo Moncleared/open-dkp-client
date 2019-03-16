@@ -50,7 +50,7 @@
                         <div class="card-header">
                             <strong>Raid Ticks</strong>
                         </div>
-                        <div *ngIf="raidModel.Ticks?.size > 0" class="card-body">
+                        <div *ngIf="raidModel.Ticks?.length > 0" class="card-body">
                             <div class="row">
                                 <p>Click the buttons below to Edit the Raid Ticks, add attendees and assign dkp values
                                     to each tick</p>
@@ -61,7 +61,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="!(raidModel.Ticks?.size > 0)" class="card-body">
+                        <div *ngIf="!(raidModel.Ticks?.length > 0)" class="card-body">
                             <p>You have not created any raid ticks yet. Click the Generate Template Raid button below to auto generate pre-defined raid ticks or use the Tick Name textbox and Create Tick button below to generate them manually.</p>
                             <p>Once you create a raid tick, on the far right drop down box you can CLONE or DELETE raid ticks individually.</p>
                             <p>Once a raid tick is created, it will become a button which you can click to edit the details of that raid tick individually.</p>

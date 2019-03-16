@@ -189,6 +189,14 @@ export class CognitoUtil {
     }
 
     /**
+     * REsends confirmation code
+     * @param username Username to resend confirmation code to
+     */
+    public resendCode(username) {
+        return Auth.resendSignUp(username);  
+    }     
+
+    /**
      * Moncs - 
      * Once a user has signed up, they need to confirm with their Verification code
      * @param username 

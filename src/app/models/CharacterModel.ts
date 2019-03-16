@@ -11,6 +11,7 @@ export class CharacterModel {
         public IdCharacter ? : number,
         public IdAssociated ? : number,
         public Active ? : boolean,
+        public MainChange ? : string,
         public SummaryModel ? : any
     ) {}
 }
