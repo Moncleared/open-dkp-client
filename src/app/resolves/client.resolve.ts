@@ -15,7 +15,6 @@ export class ClientResolve implements Resolve < any > {
      */
     resolve() {
         var subDomain = window.location.hostname.split('.')[0];
-        console.log('asdf'+subDomain);
         return new Promise((resolve, reject) => {
             if (subDomain && subDomain.length > 0) {
                 subDomain = subDomain.trim().toLowerCase();
