@@ -13,7 +13,6 @@ export class RootLayoutComponent implements OnInit {
         private router: Router,
         private clientService: ClientService) {
         this.clientService.clientDetails = this.route.snapshot.data['client'];
-        console.log(this.clientService.clientDetails);
         if ( this.clientService.clientDetails instanceof HttpErrorResponse ) {
             this.router.navigate(['/clients']);
         }

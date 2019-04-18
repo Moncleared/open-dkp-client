@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { DkpService } from '../../services/dkp.service';
 import { LoadingDataService } from '../utilities/loading-data.service';
 import { BaseComponent } from '../base/base.component';
@@ -10,6 +10,7 @@ import { UserRequest, RequestType, RequestStatus } from '../../models/UserReques
 import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { RequestModalComponent } from '../modals/requestmodal.component';
+import { SummaryCardModel } from '../../models/SummaryCardsModel';
 
 @Component({
     templateUrl: 'admin.component.html'
@@ -24,24 +25,48 @@ export class AdminComponent extends BaseComponent implements OnInit {
         this.setProtectedPage(true);
     }
     public dkpModel: DKPInfoModel = new DKPInfoModel();
-    public isLoading: boolean = true;
+    public scModel: SummaryCardModel = new SummaryCardModel();
+    public isLoading: boolean = false;
     public PendingRequestList: UserRequest[];
     public DeniedRequestList: UserRequest[];
     public ApprovedRequestList: UserRequest[];
     public RequestType = RequestType;
     public RequestStatus = RequestStatus;
+    public dkpValuesAlerts: any = [];
+    public summaryAlerts: any = [];
     bsModalRef: BsModalRef;
 
     ngOnInit(): void {
+        this.isLoading = true;
         this.dkpService.getSetting("dkp_info").then(result => {
-            this.isLoading = false;
             var settingsModel = JSON.parse(result);
-            this.dkpModel = JSON.parse(settingsModel.SettingValue);
+            if (settingsModel.SettingValue)
+                this.dkpModel = JSON.parse(settingsModel.SettingValue);
+            else
+                this.dkpModel = new DKPInfoModel();
+                this.isLoading = false;
+        }).catch(error => {
+            this.dkpModel = new DKPInfoModel();
+            this.isLoading = false;
+            console.log(error);
+        });
+        this.dkpService.getSetting('summary_card').then(result => {
+            var settingsModel = JSON.parse(result);
+            if (settingsModel.SettingValue)
+                this.scModel = JSON.parse(settingsModel.SettingValue);
+            else
+                this.scModel = new SummaryCardModel();
+                this.isLoading = false;
+        }).catch(error => {
+            this.scModel = new SummaryCardModel();
+            this.isLoading = false;
+            console.log(error);
         });
         this.fetchRequests();
     }
 
     fetchRequests() {
+        this.isLoading = true;
         this.loadingService.setLoadingStatus(true);
         this.PendingRequestList = [];
         this.ApprovedRequestList = [];
@@ -56,28 +81,76 @@ export class AdminComponent extends BaseComponent implements OnInit {
 
             this.DeniedRequestList = _.filter(result, x => x.RequestStatus == RequestStatus.DENIED);
             this.DeniedRequestList = _.orderBy(this.DeniedRequestList, x => { return x.RequestTimestamp; }, ['desc', 'asc']); 
+            this.isLoading = false;
         }).catch(error => {
+            this.isLoading = false;
             this.loadingService.setLoadingStatus(false);
             console.log(error);
         });        
     }
 
     updateDkpInfo() {
+        if ( isNaN(this.dkpModel.BRV) || isNaN(this.dkpModel.DKPCap) || isNaN(this.dkpModel.MaxBidAlt) || 
+             isNaN(this.dkpModel.MaxBidMain) || isNaN(this.dkpModel.MaxBidRA) || isNaN(this.dkpModel.MinBid) || 
+             isNaN(this.dkpModel.MinBidInc)  ) {
+                this.dkpValuesAlerts.push({
+                    type: 'danger',
+                    msg: `You need to specify numbers for these values`
+                });
+            return;
+        }
         this.loadingService.setLoadingStatus(true);
+        this.isLoading = true;
         var vSettingModel = new SettingsModel();
         vSettingModel.SettingName = "dkp_info";
         vSettingModel.SettingValue = JSON.stringify(this.dkpModel);
         vSettingModel.UpdatedBy = this.currentUser["cognito:username"];
         vSettingModel.UpdatedTimestamp = new Date();
+        
         this.dkpService.putSetting(vSettingModel).then(result => {
+            this.isLoading = false;
             this.loadingService.setLoadingStatus(false);
-            this.alerts.push({
+            this.dkpValuesAlerts.push({
                 type: 'success',
                 msg: `Saved successfully`
             });
         }).catch(error => {
+            this.isLoading = false;
             this.loadingService.setLoadingStatus(false);
-            this.alerts.push({
+            this.dkpValuesAlerts.push({
+                type: 'danger',
+                msg: `${error}`
+            });
+        });
+    }
+
+    updateSummaryCard() {
+        if ( !this.scModel.Ranks || this.scModel.Ranks.length < 0 || isNaN(this.scModel.ListSize) ) {
+                this.dkpValuesAlerts.push({
+                    type: 'danger',
+                    msg: `You need to specify numbers for these values`
+                });
+            return;
+        }
+        this.loadingService.setLoadingStatus(true);
+        this.isLoading = true;
+        var vSettingModel = new SettingsModel();
+        vSettingModel.SettingName = "summary_card";
+        vSettingModel.SettingValue = JSON.stringify(this.scModel);
+        vSettingModel.UpdatedBy = this.currentUser["cognito:username"];
+        vSettingModel.UpdatedTimestamp = new Date();
+        
+        this.dkpService.putSetting(vSettingModel).then(result => {
+            this.isLoading = false;
+            this.loadingService.setLoadingStatus(false);
+            this.summaryAlerts.push({
+                type: 'success',
+                msg: `Saved successfully`
+            });
+        }).catch(error => {
+            this.isLoading = false;
+            this.loadingService.setLoadingStatus(false);
+            this.summaryAlerts.push({
                 type: 'danger',
                 msg: `${error}`
             });
@@ -100,6 +173,7 @@ export class AdminComponent extends BaseComponent implements OnInit {
      * @param pRequest Simple request object to identify what request to update with what status
      */    
     approveRequest(pRequest: UserRequest) {
+        this.isLoading = true;
         pRequest.RequestStatus = RequestStatus.APPROVED;
         this.loadingService.setLoadingStatus(true);
         this.dkpService.updateRequest(pRequest).then(result => {
@@ -124,6 +198,7 @@ export class AdminComponent extends BaseComponent implements OnInit {
      * @param pRequest Simple request object to identify what request to update with what status
      */
     denyRequest(pRequest) {
+        this.isLoading = true;
         pRequest.RequestStatus = RequestStatus.DENIED;
         this.loadingService.setLoadingStatus(true);
         this.dkpService.updateRequest(pRequest).then(result => {

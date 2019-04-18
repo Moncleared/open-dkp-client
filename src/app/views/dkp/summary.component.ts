@@ -7,6 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import * as _ from "lodash";
 import { ClientService } from '../../services/client.service';
 import { ClientModel } from '../../models/ClientModel';
+import { SummaryCardModel } from '../../models/SummaryCardsModel';
 
 @Component({
     styles: [`
@@ -60,20 +61,29 @@ export class SummaryComponent implements OnInit {
     classArray: Set < any > = new Set();
     cookieDate: Date = new Date();
     clientDetails: ClientModel;
+    scModel: SummaryCardModel;
 
     ngOnInit(): void {
         this.loadingService.setLoadingStatus(true);
-        this.dkpService.getSummary().then(results => {
+        var vSummaryPromise = this.dkpService.getSummary();
+        var vSettingsPromise = this.dkpService.getSetting('summary_card');
+
+        Promise.all([vSummaryPromise, vSettingsPromise]).then( results => {
+            var vSummaryModels = results[0];
+            var settingsModel = JSON.parse(results[1]);
+            if (settingsModel.SettingValue) {
+                this.scModel = JSON.parse(settingsModel.SettingValue);
+            }
 
             //Grab all of the possible Classes and Ranks
-            results.Models.forEach(x => {
+            vSummaryModels.Models.forEach(x => {
                 x.CurrentDKP = Number((x.CurrentDKP).toFixed(1));
                 if ( x.CharacterRank=='Godfather' || x.CharacterRank=='Caporegime' || x.CharacterRank=='Underboss' || x.CharacterRank=='Consigliere') x.CharacterRank = 'Made Man';
                 this.classArray.add(x.CharacterClass);
                 this.rankArray.add(x.CharacterRank);
             });
 
-            var vCheckedRanks, vCheckedClasses, vPageLimit;
+            var vCheckedRanks, vCheckedClasses;
             if (this.cookieService.check('checkedRanks')) vCheckedRanks = JSON.parse(this.cookieService.get('checkedRanks'));
             if (this.cookieService.check('checkedClasses')) vCheckedClasses = JSON.parse(this.cookieService.get('checkedClasses'));
             if (this.cookieService.check('pageLimit')) this.pageLimit = JSON.parse(this.cookieService.get('pageLimit'));
@@ -96,7 +106,7 @@ export class SummaryComponent implements OnInit {
             })
             this.classArray = _.clone(tmp);
 
-            this.fModel.Models = _.orderBy(results.Models, x => { return x.Calculated_30; }, ['desc', 'asc']);
+            this.fModel.Models = _.orderBy(vSummaryModels.Models, x => { return x.Calculated_30; }, ['desc', 'asc']);
             this.fOriginalModel = _.cloneDeep(this.fModel);
 
             this.modelArray.push({ class: "Bard", style: { 'color': 'white', 'background-color': 'rgb(32, 212, 190)' }, top: this.getFormattedArray("Bard") });
@@ -119,10 +129,8 @@ export class SummaryComponent implements OnInit {
             this.applyFilters();
 
             this.loadingService.setLoadingStatus(false);
-        }).catch(error => {
-            this.loadingService.setLoadingStatus(false);
-            console.log(error);
-        })
+
+        });
     }
 
     /**
@@ -161,15 +169,24 @@ export class SummaryComponent implements OnInit {
                 (x.CharacterRank == "Made Man" || x.CharacterRank == "Godfather" || x.CharacterRank == "Caporegime" || x.CharacterRank == "Consigliere" || x.CharacterRank == "Underboss" || x.CharacterRank == "Member"); 
             });
         } else {
-            vArrayModel = _.filter(this.fModel.Models, x => { return x.CharacterClass == pClass });            
+            vArrayModel = _.filter(this.fModel.Models, x => {
+                if ( this.scModel && this.scModel.Ranks.length > 0 ) {
+                    return (x.CharacterClass == pClass && this.scModel.Ranks.toLowerCase().indexOf(x.CharacterRank.toLowerCase()) > -1); 
+                } else {
+                    return x.CharacterClass == pClass; 
+                }
+            });            
         }
         vArrayModel = _.orderBy(vArrayModel, x => { return x.CurrentDKP; }, ['desc', 'asc']);
+        if ( this.scModel && this.scModel.ListSize > 0 ) {
+            vArrayModel = _.slice(vArrayModel, 0, this.scModel.ListSize);
+        } else {
         vArrayModel = _.slice(vArrayModel, 0, 5);
+        }
         return vArrayModel;
     }
 
     onPageChange(event) {
-        console.log(this.cookieDate);
         this.cookieService.set('pageLimit', JSON.stringify(event), this.cookieDate);
     }
 }

@@ -161,6 +161,36 @@
                         <i class="fa fa-dot-circle-o"></i> Save</button>
                 </div>
                 <div class="card-footer">
+                    <div *ngFor="let alert of dkpValuesAlerts">
+                        <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                    </div>                    
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <strong>Summary Card Settings</strong>
+                </div>
+                <div class="card-body">
+                    <p>These settings control the Class cards at the top of the DKP Summary Page. You can define which Ranks show up in those cards along with how many show up in each card. If no values are stored here, the defaults are all ranks show and up to 5 are listed.</p>
+                    <div class="form-group row">
+                        <label data-toggle="tooltip" title="Separate ranks by commas, not case sensitive" class="col-md-3 col-form-label" for="scRanks"> <i class="fa fa-question"></i> Ranks to Display</label>
+                        <div class="col-md-9">
+                            <input type="text" id="scRanks" class="form-control" placeholder="Main,Member,Alt,Enforcer" [(ngModel)]="scModel.Ranks" name="scRanks">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-md-3 col-form-label" for="scListSize">Max List Size</label>
+                        <div class="col-md-9">
+                            <input type="number" id="scListSize" class="form-control" placeholder="5" [(ngModel)]="scModel.ListSize" name="scListSize">
+                        </div>
+                    </div>
+                    <button type="submit" [disabled]="isLoading" class="btn btn-sm btn-success" (click)="updateSummaryCard()">
+                        <i class="fa fa-dot-circle-o"></i> Save</button>
+                </div>
+                <div class="card-footer">
+                    <div *ngFor="let alert of summaryAlerts">
+                        <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                    </div>                    
                 </div>
             </div>
         </div>

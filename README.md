@@ -83,4 +83,4 @@ Get updates on CoreUI's development and chat with the project maintainers and co
 
 ## Support OpenDKP Development
 
-If you would like to show your support, you can with  [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=2R3B5A3LJ5LBC&source=url), however, it is absolutely not required.
+If you would like to show your support, you can with  [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ECQ5J8H82HWT8&source=url), however, it is absolutely not required.

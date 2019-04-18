@@ -151,6 +151,8 @@ export class TickHelperComponent extends BaseComponent implements OnInit {
                 msg: `Request submitted successfully, please wait for administrator to review...`
             });            
             this.loadingService.setLoadingStatus(false);
+            this.LogData = '';
+            this.SelectedData.ActionPending = true;
             this.disabled = false;
         }).catch(error => {
             this.loadingService.setLoadingStatus(false);
