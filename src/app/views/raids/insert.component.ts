@@ -379,7 +379,7 @@ export class InsertRaidComponent extends BaseComponent implements OnInit {
         var itemModels = [];
         vLineTokens.forEach(line => {
             //Clean up the Input, remove all of the timestamp and character name etc
-            line = line.toLowerCase();
+            line = line.toLowerCase().trim();
 
             //If this line contains the word REMOVE, means we have an issue with the awarding of the item
             if ( line.indexOf("remove") > -1 ) {

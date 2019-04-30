@@ -1,4 +1,4 @@
-<app-header [fixed]="true" [navbarBrandFull]="clientLogo" [navbarBrandMinimized]="{src: 'assets/img/favicon.ico', width: 30, height: 30, alt: 'OGC'}" [sidebarToggler]="'lg'" [asideMenuToggler]="false">
+<app-header [fixed]="true" [navbarBrandFull]="clientLogo" [navbarBrandMinimized]="{src: 'assets/img/favicon.png', width: 30, height: 30, alt: 'OGC'}" [sidebarToggler]="'lg'" [asideMenuToggler]="false">
     <ul class="nav navbar-nav d-md-down-none">
         <!---->
         <li class="nav-item px-3">
@@ -55,6 +55,7 @@
         <loading-data *ngIf="isLoading"></loading-data>
         <div class="container-fluid">
             <router-outlet></router-outlet>
+            <div class="loading-centered" *ngIf="isLoading"><div class="lds-dual-ring"></div></div>            
         </div><!-- /.container-fluid -->
     </main>
     <div bsModal #smallModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></div>

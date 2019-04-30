@@ -6,6 +6,13 @@
                     <strong>Admin Links & Utilities</strong>
                 </div>
                 <div class="card-body">
+                    <p>Use the button below to trigger a refresh on the cache system, useful when you've made character updates but not DKP updates.
+                        The cache will automatically update every 12 hours OR when a DKP change is detected such as Add/Delete/Update raids or Adjustments.
+                        It should be rare that you force reset a cache, give approximately 30 seconds for this operation to finish</p>
+                    <button type="button" [disabled]="isLoading" (click)="resetCache()" class="btn btn-light">Force Reset Summary Cache</button>
+
+                    <p>Below are useful administrative tools for the site, each with their own dedicated page</p>
+
                     <div class="list-group">
                         <a class="list-group-item list-group-item-action" routerLink="/admin/roster">Guild Roster Tool</a>
                     </div>
@@ -45,9 +52,9 @@
                                 </ngx-datatable-column>
                                 <ngx-datatable-column name="" [sortable]="true" prop="" [minWidth]="250">
                                     <ng-template let-value="value" let-row="row" ngx-datatable-cell-template>
-                                        <button type="button" class="btn btn-sm btn-primary" (click)="requestDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
-                                        <button type="button" class="btn btn-sm btn-success" (click)="approveRequest(row)"><i class="fa fa-dot-circle-o"></i> Approve</button>
-                                        <button type="button" class="btn btn-sm btn-danger" (click)="denyRequest(row)"><i class="fa fa-dot-circle-o"></i> Deny</button>
+                                        <button type="button" [disabled]="isLoading" class="btn btn-sm btn-primary" (click)="requestDetails(row)"><i class="fa fa-dot-circle-o"></i> Details</button>
+                                        <button type="button" [disabled]="isLoading" class="btn btn-sm btn-success" (click)="approveRequest(row)"><i class="fa fa-dot-circle-o"></i> Approve</button>
+                                        <button type="button" [disabled]="isLoading" class="btn btn-sm btn-danger" (click)="denyRequest(row)"><i class="fa fa-dot-circle-o"></i> Deny</button>
                                     </ng-template>
                                 </ngx-datatable-column>
                             </ngx-datatable>
@@ -191,6 +198,57 @@
                     <div *ngFor="let alert of summaryAlerts">
                         <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
                     </div>                    
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Nightly Batch Settings</strong>
+                    </div>
+                    <div class="card-body">
+                        <p>Every night OpenDKP runs a batch job which automatically marks characters as Active or Inactive based on their raiding history.
+                            Below you can toggle the batch on, off or fine tune the batch settings such as deciding whether the batch marks characters as active or inactive.
+                            The batch will mark inactive characters as active if they have attended a raid in the last N days, where N is determined by you.
+                            The batch will mark active characters as inactive if they have NOT attended a raid in the last N days, where N is determined by you.</p>
+                        <div class="form-group row">
+                            <label data-toggle="tooltip" title="Toggle whether the nightly batch runs or not" class="col-md-3 col-form-label" for="nbEnabled"> <i class="fa fa-question"></i> Enable Batch</label>
+                            <div class="col-md-9">
+                                <label class="switch switch-success">
+                                    <input id="nbEnabled" type="checkbox" class="switch-input" [(ngModel)]="nbModel.Enabled">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label data-toggle="tooltip" title="Toggle whether Characters are marked active during the batch cycle" class="col-md-3 col-form-label" for="nbActive"> <i class="fa fa-question"></i> Mark Active</label>
+                            <div class="col-md-3">
+                                <label class="switch switch-success">
+                                    <input id="nbActive" type="checkbox" class="switch-input" [disabled]="!nbModel.Enabled" [(ngModel)]="nbModel.MarkActive">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label data-toggle="tooltip" title="Toggle whether Characters are marked inactive during the batch cycle" class="col-md-3 col-form-label" for="nbInactive"> <i class="fa fa-question"></i> Mark Inactive</label>
+                            <div class="col-md-3">
+                                <label class="switch switch-success">
+                                    <input id="nbInactive" type="checkbox" class="switch-input" [disabled]="!nbModel.Enabled" [(ngModel)]="nbModel.MarkInactive">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label data-toggle="tooltip" title="The number of days a character goes without attending a raid before being marked as Inactive" class="col-md-3 col-form-label" for="nbInactive"> <i class="fa fa-question"></i> Days Till Inactive</label>
+                            <div class="col-md-3">
+                                <input type="number" id="nbSize" class="form-control" placeholder="30" [disabled]="!nbModel.Enabled" [(ngModel)]="nbModel.Days" name="nbSize">
+                            </div>
+                        </div>
+                        <button type="submit" [disabled]="isLoading" class="btn btn-sm btn-success" (click)="updateBatchSettings()">
+                            <i class="fa fa-dot-circle-o"></i> Save</button>
+                    </div>
+                    <div class="card-footer">
+                        <div *ngFor="let alert of batchAlerts">
+                            <alert [type]="alert.type" dismissible="true">{{ alert.msg }}</alert>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

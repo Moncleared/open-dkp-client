@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { RequestModalComponent } from '../modals/requestmodal.component';
 import { SummaryCardModel } from '../../models/SummaryCardsModel';
+import { BatchModel } from '../../models/BatchModel';
 
 @Component({
     templateUrl: 'admin.component.html'
@@ -26,6 +27,7 @@ export class AdminComponent extends BaseComponent implements OnInit {
     }
     public dkpModel: DKPInfoModel = new DKPInfoModel();
     public scModel: SummaryCardModel = new SummaryCardModel();
+    public nbModel: BatchModel = new BatchModel();
     public isLoading: boolean = false;
     public PendingRequestList: UserRequest[];
     public DeniedRequestList: UserRequest[];
@@ -34,6 +36,7 @@ export class AdminComponent extends BaseComponent implements OnInit {
     public RequestStatus = RequestStatus;
     public dkpValuesAlerts: any = [];
     public summaryAlerts: any = [];
+    public batchAlerts: any = [];
     bsModalRef: BsModalRef;
 
     ngOnInit(): void {
@@ -62,7 +65,34 @@ export class AdminComponent extends BaseComponent implements OnInit {
             this.isLoading = false;
             console.log(error);
         });
+
+        this.dkpService.getSetting('batch_settings').then(result => {
+            var settingsModel = JSON.parse(result);
+            if (settingsModel.SettingValue)
+                this.nbModel = JSON.parse(settingsModel.SettingValue);
+            else
+                this.nbModel = new BatchModel();
+            this.isLoading = false;
+        }).catch(error => {
+            this.scModel = new SummaryCardModel();
+            this.isLoading = false;
+            console.log(error);
+        });
+
         this.fetchRequests();
+    }
+
+    resetCache() {
+        this.isLoading = true;
+        this.loadingService.setLoadingStatus(true);
+        this.dkpService.resetCache().then(result => {
+            this.isLoading = false;
+            this.loadingService.setLoadingStatus(false);
+        }).catch(error => {
+            this.isLoading = false;
+            this.loadingService.setLoadingStatus(false);
+            console.log(error);
+        });
     }
 
     fetchRequests() {
@@ -87,6 +117,39 @@ export class AdminComponent extends BaseComponent implements OnInit {
             this.loadingService.setLoadingStatus(false);
             console.log(error);
         });        
+    }
+
+    updateBatchSettings() {
+        if (!this.nbModel.Days || this.nbModel.Days <= 0 || isNaN(this.nbModel.Days)) {
+            this.batchAlerts.push({
+                type: 'danger',
+                msg: `You need to specify a number greater than 0 for the Days`
+            });
+            return;
+        }
+        this.loadingService.setLoadingStatus(true);
+        this.isLoading = true;
+        var vSettingModel = new SettingsModel();
+        vSettingModel.SettingName = "batch_settings";
+        vSettingModel.SettingValue = JSON.stringify(this.nbModel);
+        vSettingModel.UpdatedBy = this.currentUser["cognito:username"];
+        vSettingModel.UpdatedTimestamp = new Date();
+
+        this.dkpService.putSetting(vSettingModel).then(result => {
+            this.isLoading = false;
+            this.loadingService.setLoadingStatus(false);
+            this.batchAlerts.push({
+                type: 'success',
+                msg: `Saved successfully`
+            });
+        }).catch(error => {
+            this.isLoading = false;
+            this.loadingService.setLoadingStatus(false);
+            this.batchAlerts.push({
+                type: 'danger',
+                msg: `${error}`
+            });
+        });
     }
 
     updateDkpInfo() {
@@ -173,6 +236,7 @@ export class AdminComponent extends BaseComponent implements OnInit {
      * @param pRequest Simple request object to identify what request to update with what status
      */    
     approveRequest(pRequest: UserRequest) {
+        this.alerts = [];
         this.isLoading = true;
         pRequest.RequestStatus = RequestStatus.APPROVED;
         this.loadingService.setLoadingStatus(true);
@@ -198,6 +262,7 @@ export class AdminComponent extends BaseComponent implements OnInit {
      * @param pRequest Simple request object to identify what request to update with what status
      */
     denyRequest(pRequest) {
+        this.alerts = [];
         this.isLoading = true;
         pRequest.RequestStatus = RequestStatus.DENIED;
         this.loadingService.setLoadingStatus(true);

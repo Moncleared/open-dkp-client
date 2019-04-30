@@ -95,11 +95,10 @@ export class DefaultLayoutComponent extends BaseComponent implements OnInit {
             }
         });
         this.dkpService.getAllRequests().then(result => {
-            var vFiltered = _.filter(result, (x: any) => { return x.RequestStatus == 0 });
-            this.requestCount = vFiltered.length;
         }).catch(error => {
             console.log(error);
         });
+        this.dkpService.pendingRequests().subscribe(x => this.requestCount = x);
     };
 
     logout(): void {

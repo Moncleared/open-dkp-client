@@ -15,3 +15,8 @@ export class CharacterModel {
         public SummaryModel ? : any
     ) {}
 }
+
+export enum ActiveEnum {
+    "Inactive" = 0,
+    "Active" = 1
+}

@@ -59,6 +59,11 @@ Amplify.configure({
     providedIn: 'root',
 })
 export class DkpService {
+
+    private pendingRequestsSubject = new BehaviorSubject <number> (0);    
+    pendingRequests(): Observable <number> {
+        return this.pendingRequestsSubject.asObservable();
+    }
     fCharacterApi = `CharacterAPIs`;
     fCharacterPath = `/beta/characters`;
 
@@ -280,6 +285,16 @@ export class DkpService {
             }
         }
         return API.get(this.fDkpApi, this.fDkpPath, data);
+    }
+
+    resetCache() : any {
+        let data = {
+            headers: {
+                ClientId: this.clientDetails.ClientId,
+                forceCache: "true"
+            }
+        }
+        return API.get(this.fDkpApi, this.fDkpPath, data);        
     }
 
     /**
@@ -512,7 +527,17 @@ export class DkpService {
                 ClientId: this.clientDetails.ClientId
             }
         }
-        return API.get(this.fAdminApis, this.fUserRequestPath, data);
+
+        //Need to notify others that pending request value has changed
+        return new Promise( (resolve,reject) => {
+            API.get(this.fAdminApis, this.fUserRequestPath, data).then( response => {
+                var vFiltered = _.filter(response, (x: any) => { return x.RequestStatus == 0 });          
+                this.pendingRequestsSubject.next(vFiltered.length);
+                resolve(response);
+            }).catch( error => {
+                reject(error)
+            });
+        });
     }
 
     /**

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DkpService } from '../../services/dkp.service';
-import { CharacterModel } from '../../models/CharacterModel';
+import { CharacterModel, ActiveEnum } from '../../models/CharacterModel';
 import { LoadingDataService } from '../utilities/loading-data.service';
 import { BaseComponent } from '../base/base.component';
 import { CognitoUtil } from '../../services/cognito.service'
@@ -19,6 +19,7 @@ export class CharactersComponent extends BaseComponent implements OnInit {
     }
     public vCharacterList: CharacterModel[] = [];
     private fOriginalData: CharacterModel[] = [];
+    public ActiveEnum = ActiveEnum;
     public filterBy: string;
     public isChecked: boolean = false;
 
@@ -40,6 +41,10 @@ export class CharactersComponent extends BaseComponent implements OnInit {
     onKey(event) {
         if (this.filterBy && this.filterBy.length > 0) {
             this.vCharacterList = _.filter(this.fOriginalData, model => {
+                if ( this.filterBy.toLowerCase().trim()=='active') 
+                    return model.Active;
+                    if ( this.filterBy.toLowerCase().trim()=='inactive') 
+                    return !model.Active;                    
                 return (model.Name && model.Name.length > 0 && model.Name.toLowerCase().indexOf(this.filterBy.toLowerCase()) > -1) ||
                     (model.Class && model.Class.length > 0 && model.Class.toLowerCase().indexOf(this.filterBy.toLowerCase()) > -1) ||
                     (model.Rank && model.Rank.length > 0 && model.Rank.toLowerCase().indexOf(this.filterBy.toLowerCase()) > -1) ||

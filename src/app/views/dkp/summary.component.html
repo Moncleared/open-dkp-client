@@ -90,6 +90,15 @@
             </ng-template>
         </ngx-datatable-column>
 
+        <!-- Class Column-->
+        <ngx-datatable-column name="Class" [sortable]="true" [flexGrow]="1" prop="CharacterClass">
+            <ng-template let-column="column" let-sort="sortFn" let-sortDir="sortDir" ngx-datatable-header-template>
+                <a href="javascript:;"><span class="mobile-hidden" (click)="sort($event, sortDir, sortFn)">{{column.name}}</span></a>
+            </ng-template>
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+                <span class="mobile-hidden">{{row.CharacterClass}}</span>
+            </ng-template>
+        </ngx-datatable-column>
 
         <!-- Rank Column-->
         <ngx-datatable-column name="Rank" [sortable]="true" [flexGrow]="1" prop="CharacterRank">

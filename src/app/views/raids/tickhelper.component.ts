@@ -138,6 +138,13 @@ export class TickHelperComponent extends BaseComponent implements OnInit {
             this.modalRef.hide();
             return;
         }
+
+        if ( !this.LogData || this.LogData.trim().length > 5000 ) {
+            this.pushAlert("There is a 5000 character limit!", 'danger');
+            this.modalRef.hide();
+            return;
+        }
+
         this.loadingService.setLoadingStatus(true);
         this.disabled = true;
 
